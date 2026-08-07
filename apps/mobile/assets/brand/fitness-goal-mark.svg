@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="performance-ring" x1="256" y1="256" x2="768" y2="768" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF3858"/>
+      <stop offset="0.36" stop-color="#38D16A"/>
+      <stop offset="0.68" stop-color="#1689F8"/>
+      <stop offset="1" stop-color="#B45CF2"/>
+    </linearGradient>
+  </defs>
+  <circle cx="512" cy="512" r="320" stroke="url(#performance-ring)" stroke-width="48"/>
+  <circle cx="512" cy="512" r="218" stroke="#38D16A" stroke-opacity=".72" stroke-width="30"/>
+  <path d="M512 690V330m0 140-104-76m104 162 108-102M512 470l100-96" stroke="#94E8D1" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="512" cy="324" r="31" fill="#38D16A"/>
+  <circle cx="402" cy="390" r="29" fill="#FF3858"/>
+  <circle cx="624" cy="450" r="29" fill="#1689F8"/>
+  <circle cx="616" cy="370" r="29" fill="#B45CF2"/>
+</svg>

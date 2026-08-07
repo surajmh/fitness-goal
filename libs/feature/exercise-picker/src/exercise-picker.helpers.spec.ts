@@ -1,4 +1,4 @@
-import { filterExercises } from './exercise-picker.helpers';
+import { filterExercises, formatFilterLabel } from './exercise-picker.helpers';
 
 describe('filterExercises', () => {
   it('filters by query, muscle, and equipment', () => {
@@ -19,5 +19,13 @@ describe('filterExercises', () => {
         equipment: 'all',
       }),
     ).toHaveLength(0);
+  });
+});
+
+describe('formatFilterLabel', () => {
+  it('capitalizes words and handles all', () => {
+    expect(formatFilterLabel('all')).toBe('All');
+    expect(formatFilterLabel('upper legs')).toBe('Upper Legs');
+    expect(formatFilterLabel('leverage machine')).toBe('Leverage Machine');
   });
 });

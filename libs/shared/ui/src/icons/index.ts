@@ -22,5 +22,7 @@ export { Timer as TimerReset } from './generated/timer';
 export { Trash as Trash2 } from './generated/trash';
 export { Trend as TrendingUp } from './generated/trend';
 export { X } from './generated/x';
+export { Filter } from './generated/filter';
 export { BrandMark } from './generated/brand-mark';
 export { ExerciseFigure, type ExerciseFigureVariant } from './exercise-figure';
+

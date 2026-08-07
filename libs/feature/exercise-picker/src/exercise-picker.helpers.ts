@@ -13,3 +13,11 @@ export function filterExercises(
       (filters.equipment === 'all' || exercise.equipment === filters.equipment),
   );
 }
+
+export function formatFilterLabel(label: string): string {
+  if (!label || label === 'all') return 'All';
+  return label
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}

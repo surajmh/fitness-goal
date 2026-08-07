@@ -6,4 +6,6 @@ export type RowProps = {
   onPress?: () => void;
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
+  border?: boolean;
 };
+
