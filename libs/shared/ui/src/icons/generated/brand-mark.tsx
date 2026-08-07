@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G, Polyline, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
+import Svg, { Path, Circle, Rect, G, Polyline, Polygon, Line, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
 export interface IconProps extends SvgProps {
   color?: string;
   size?: number;
@@ -8,7 +8,7 @@ export interface IconProps extends SvgProps {
 export function BrandMark({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.8,
+  strokeWidth = 1.5,
   fill = 'none',
   ...props
 }: IconProps) {

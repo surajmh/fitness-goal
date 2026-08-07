@@ -7,6 +7,8 @@ import Svg, {
   Rect,
   G,
   Polyline,
+  Polygon,
+  Line,
   Defs,
   LinearGradient,
   Stop,
@@ -22,7 +24,7 @@ export interface IconProps extends SvgProps {
 export function ${variables.componentName}({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.8,
+  strokeWidth = 1.5,
   fill = 'none',
   ...props
 }: IconProps) {

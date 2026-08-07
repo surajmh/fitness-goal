@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G, Polyline, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
+import Svg, { Path, Circle, Rect, G, Polyline, Polygon, Line, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
 export interface IconProps extends SvgProps {
   color?: string;
   size?: number;
@@ -8,9 +8,9 @@ export interface IconProps extends SvgProps {
 export function Rotate({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.8,
+  strokeWidth = 1.5,
   fill = 'none',
   ...props
 }: IconProps) {
-  return <Svg width={size} height={size} accessibilityElementsHidden viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...props}><Path d="M5 8.5A8 8 0 1 1 4.5 16" /><Path d="M5 4.5v4H1" /></Svg>;
+  return <Svg width={size} height={size} accessibilityElementsHidden viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...props}><Path d="M1 4v6h6" /><Path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" /></Svg>;
 }

@@ -46,6 +46,7 @@ for (const file of files) {
     cleanedCode = cleanedCode
       .replace('<Svg ', '<Svg width={size} height={size} accessibilityElementsHidden ')
       .replace(/stroke="currentColor"/g, 'stroke={color}')
+      .replace(/strokeWidth=\{1\.5\}/g, 'strokeWidth={strokeWidth}')
       .replace(/strokeWidth=\{1\.8\}/g, 'strokeWidth={strokeWidth}');
   }
 
