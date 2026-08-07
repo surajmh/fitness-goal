@@ -1,0 +1,86 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
+@import 'nativewind/theme';
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+    --canvas: oklch(1 0 0);
+    --surface: #f2f3f5;
+    --surface-raised: #ffffff;
+    --ink: #101114;
+    --muted: #62666d;
+    --outline: #dfe1e5;
+    --primary: #087e6c;
+    --on-primary: #ffffff;
+    --accent: #087e6c;
+    --coral: #d72d4c;
+    --lime: #237a3c;
+    --cyan: #096fbd;
+    --recovery: #7b3ab5;
+    --on-recovery: #ffffff;
+    --success: #167c4d;
+    --warning: #9b5a00;
+    --danger: #c82d48;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --canvas: #070a10;
+      --surface: #151a22;
+      --surface-raised: #1d232d;
+      --ink: #f7f9fc;
+      --muted: #aab1bc;
+      --outline: #343d4b;
+      --primary: #94e8d1;
+      --on-primary: #061e19;
+      --accent: #94e8d1;
+      --coral: #ff3858;
+      --lime: #38d16a;
+      --cyan: #1689f8;
+      --recovery: #b45cf2;
+      --on-recovery: #180824;
+      --success: #5dd895;
+      --warning: #f3c558;
+      --danger: #ff5c73;
+    }
+  }
+}
+
+@layer theme {
+  @theme {
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+    --color-outline: var(--outline);
+    --color-primary: var(--primary);
+    --color-on-primary: var(--on-primary);
+    --color-accent: var(--accent);
+    --color-coral: var(--coral);
+    --color-lime: var(--lime);
+    --color-cyan: var(--cyan);
+    --color-recovery: var(--recovery);
+    --color-on-recovery: var(--on-recovery);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-danger: var(--danger);
+    --font-sans: system-ui;
+  }
+}
+
+@media ios {
+  :root {
+    --font-sans: system-ui;
+    --font-rounded: ui-rounded;
+  }
+}
+
+@media android {
+  :root {
+    --font-sans: normal;
+    --font-rounded: normal;
+  }
+}

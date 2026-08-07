@@ -1,0 +1,78 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="expo.modules.healthsync" >
+4
+5    <uses-sdk android:minSdkVersion="24" />
+6
+7    <uses-permission android:name="android.permission.health.READ_STEPS" />
+7-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:2:3-74
+7-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:2:20-71
+8    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+8-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:3:3-77
+8-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:3:20-74
+9    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+9-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:4:3-91
+9-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:4:20-88
+10    <uses-permission android:name="android.permission.health.READ_DISTANCE" />
+10-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:5:3-77
+10-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:5:20-74
+11    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+11-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:6:3-79
+11-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:6:20-76
+12    <uses-permission android:name="android.permission.health.READ_SLEEP" />
+12-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:7:3-74
+12-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:7:20-71
+13    <uses-permission android:name="android.permission.health.READ_WEIGHT" />
+13-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:8:3-75
+13-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:8:20-72
+14    <uses-permission android:name="android.permission.health.READ_BODY_FAT" />
+14-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:9:3-77
+14-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:9:20-74
+15
+16    <queries>
+16-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:11:3-13:13
+17        <package android:name="com.google.android.apps.healthdata" />
+17-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:12:5-66
+17-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:12:14-63
+18    </queries>
+19
+20    <application>
+20-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:15:3-33:17
+21        <activity
+21-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:16:5-22:16
+22            android:name="expo.modules.healthsync.HealthPermissionsRationaleActivity"
+22-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:17:7-80
+23            android:exported="true" >
+23-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:18:7-30
+24            <intent-filter>
+24-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:19:7-21:23
+25                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+25-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:20:9-84
+25-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:20:17-81
+26            </intent-filter>
+27        </activity>
+28
+29        <activity-alias
+29-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:23:5-32:22
+30            android:name="expo.modules.healthsync.ViewHealthPermissionUsageActivity"
+30-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:24:7-79
+31            android:exported="true"
+31-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:25:7-30
+32            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+32-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:26:7-74
+33            android:targetActivity="expo.modules.healthsync.HealthPermissionsRationaleActivity" >
+33-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:27:7-90
+34            <intent-filter>
+34-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:28:7-31:23
+35                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+35-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:29:9-78
+35-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:29:17-75
+36
+37                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+37-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:30:9-79
+37-->/Users/suraj/Projects/FitnessGoal/apps/mobile/modules/health-sync/android/src/main/AndroidManifest.xml:30:19-76
+38            </intent-filter>
+39        </activity-alias>
+40    </application>
+41
+42</manifest>
