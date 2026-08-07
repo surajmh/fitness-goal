@@ -29,7 +29,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "./modules/health-sync/app.plugin.js",
+      "../../libs/shared/health-sync-module/app.plugin.js",
       "expo-notifications",
       [
         "expo-splash-screen",

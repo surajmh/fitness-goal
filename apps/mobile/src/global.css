@@ -3,6 +3,10 @@
 @import 'tailwindcss/utilities.css';
 @import 'nativewind/theme';
 
+@source "../../../libs";
+@source "../../../apps/mobile/app";
+@source ".";
+
 @layer base {
   :root {
     color-scheme: light dark;

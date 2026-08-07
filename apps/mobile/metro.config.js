@@ -26,6 +26,8 @@ const customConfig = {
 };
 
 
+const path = require('path');
+
 const nxConfig = withNxMetro(mergeConfig(defaultConfig, customConfig), {
   // Change this to true to see debugging info.
   // Useful if you have issues resolving modules
@@ -33,11 +35,12 @@ const nxConfig = withNxMetro(mergeConfig(defaultConfig, customConfig), {
   // all the file extensions used for imports other than 'ts', 'tsx', 'js', 'jsx', 'json'
   extensions: [],
   // Specify folders to watch, in addition to Nx defaults (workspace libraries and node_modules)
-  watchFolders: [],
+  watchFolders: [path.resolve(__dirname, '../../libs')],
 });
 
 const addNativewind = (config) =>
   withNativewind(config, {
+    input: './src/global.css',
     inlineVariables: false,
     globalClassNamePolyfill: false,
   });

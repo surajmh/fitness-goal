@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -14,7 +16,18 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
-    "paths": {}
+    "paths": {
+      "@fitnessgoal/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@fitnessgoal/data-access/workout": ["libs/data-access/workout/src/index.ts"],
+      "@fitnessgoal/feature/today": ["libs/feature/today/src/index.ts"],
+      "@fitnessgoal/feature/plans": ["libs/feature/plans/src/index.ts"],
+      "@fitnessgoal/feature/active-workout": ["libs/feature/active-workout/src/index.ts"],
+      "@fitnessgoal/feature/history": ["libs/feature/history/src/index.ts"],
+      "@fitnessgoal/feature/settings": ["libs/feature/settings/src/index.ts"],
+      "@fitnessgoal/feature/exercise-picker": ["libs/feature/exercise-picker/src/index.ts"],
+      "@fitnessgoal/feature-shell/app-shell": ["libs/feature-shell/app-shell/src/index.ts"],
+      "@fitnessgoal/health-sync-module": ["libs/shared/health-sync-module/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

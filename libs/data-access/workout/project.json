@@ -1,0 +1,8 @@
+{
+  "name": "data-access-workout",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/data-access/workout/src",
+  "projectType": "library",
+  "tags": ["type:data-access"],
+  "targets": {}
+}

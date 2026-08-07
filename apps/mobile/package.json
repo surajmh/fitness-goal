@@ -24,6 +24,7 @@
     "react-native-safe-area-context": "*",
     "react-native-svg": "*",
     "react-native-svg-transformer": "*",
+    "@fitnessgoal/health-sync-module": "file:../../libs/shared/health-sync-module",
     "react-native-web": "*"
   }
 }

@@ -1,0 +1,8 @@
+{
+  "name": "feature-exercise-picker",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/exercise-picker/src",
+  "projectType": "library",
+  "tags": ["type:feature"],
+  "targets": {}
+}

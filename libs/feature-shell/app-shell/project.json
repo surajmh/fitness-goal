@@ -1,0 +1,8 @@
+{
+  "name": "feature-shell-app-shell",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature-shell/app-shell/src",
+  "projectType": "library",
+  "tags": ["type:feature-shell"],
+  "targets": {}
+}

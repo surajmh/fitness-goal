@@ -4,10 +4,19 @@ module.exports = function (api) {
     presets: ['babel-preset-expo'],
     overrides: [
       {
-        test: (filename) => filename?.startsWith(`${__dirname}/src/`) ?? false,
+        test: (filename) =>
+          Boolean(
+            filename &&
+              !filename.includes('/node_modules/') &&
+              (filename.includes('/src/') ||
+                filename.includes('/libs/') ||
+                filename.includes('/app/')),
+          ),
         plugins: [
           ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
           ['@babel/plugin-transform-class-properties', { loose: true }],
+          ['@babel/plugin-transform-private-methods', { loose: true }],
+          ['@babel/plugin-transform-private-property-in-object', { loose: true }],
         ],
       },
     ],

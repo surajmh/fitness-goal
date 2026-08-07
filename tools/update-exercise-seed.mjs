@@ -2,7 +2,7 @@ import { writeFile } from 'node:fs/promises';
 
 const DATASET_COMMIT = '7455efae41b330c265e7cd4b78dfa848e7ce5ebd';
 const DATASET_URL = `https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/${DATASET_COMMIT}/data/exercises.json`;
-const OUTPUT_URL = new URL('../apps/mobile/assets/seed.json', import.meta.url);
+const OUTPUT_URL = new URL('../libs/data-access/workout/src/assets/seed.json', import.meta.url);
 
 const response = await fetch(DATASET_URL);
 if (!response.ok) {

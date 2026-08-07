@@ -1,0 +1,8 @@
+{
+  "name": "feature-plans",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/plans/src",
+  "projectType": "library",
+  "tags": ["type:feature"],
+  "targets": {}
+}

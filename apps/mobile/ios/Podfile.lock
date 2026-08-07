@@ -78,8 +78,6 @@ PODS:
   - ExpoSystemUI (56.0.5):
     - ExpoModulesCore
   - FBLazyVector (0.85.3)
-  - HealthSync (1.0.0):
-    - ExpoModulesCore
   - hermes-engine (250829098.0.10):
     - hermes-engine/Pre-built (= 250829098.0.10)
   - hermes-engine/Pre-built (250829098.0.10)
@@ -2004,7 +2002,6 @@ DEPENDENCIES:
   - ExpoSplashScreen (from `../../../node_modules/expo-splash-screen/ios`)
   - ExpoSystemUI (from `../../../node_modules/expo-system-ui/ios`)
   - FBLazyVector (from `../../../node_modules/react-native/Libraries/FBLazyVector`)
-  - HealthSync (from `../modules/health-sync/ios`)
   - hermes-engine (from `../../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - RCTDeprecation (from `../../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../../../node_modules/react-native/Libraries/Required`)
@@ -2117,8 +2114,6 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-system-ui/ios"
   FBLazyVector:
     :path: "../../../node_modules/react-native/Libraries/FBLazyVector"
-  HealthSync:
-    :path: "../modules/health-sync/ios"
   hermes-engine:
     :podspec: "../../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-v250829098.0.10
@@ -2292,7 +2287,6 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: 0c06099febe733279021ca62b0b7534005a43c93
   ExpoSystemUI: 8f4fb641c6a6ebe2a01dda0fbd3fdd952ab5823a
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
-  HealthSync: 22dae3b14fa39796b6ef3396e6088184b5458c78
   hermes-engine: 449cf2e15cfb7ea3be0ddd75b8fbc4a87ad53d19
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
   RCTRequired: 9f3a7e5645d4bc3f551593de7550bb66ab6e42bc

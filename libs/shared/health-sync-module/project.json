@@ -1,0 +1,8 @@
+{
+  "name": "shared-health-sync-module",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/health-sync-module",
+  "projectType": "library",
+  "tags": ["type:shared"],
+  "targets": {}
+}

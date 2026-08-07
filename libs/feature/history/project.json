@@ -1,0 +1,8 @@
+{
+  "name": "feature-history",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/history/src",
+  "projectType": "library",
+  "tags": ["type:feature"],
+  "targets": {}
+}

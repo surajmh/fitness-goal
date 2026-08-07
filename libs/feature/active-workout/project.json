@@ -1,0 +1,8 @@
+{
+  "name": "feature-active-workout",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/active-workout/src",
+  "projectType": "library",
+  "tags": ["type:feature"],
+  "targets": {}
+}
