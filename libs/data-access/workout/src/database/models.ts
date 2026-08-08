@@ -25,11 +25,21 @@ export class Exercise extends SyncModel {
   @field('target') target?: string;
   @field('secondary_muscles') secondaryMusclesJson?: string;
   @field('instructions') instructions?: string;
+  @field('media_frames') mediaFramesJson?: string;
 
   get secondaryMuscles(): string[] {
     if (!this.secondaryMusclesJson) return [];
     try {
       return JSON.parse(this.secondaryMusclesJson) as string[];
+    } catch {
+      return [];
+    }
+  }
+
+  get mediaFrames(): string[] {
+    if (!this.mediaFramesJson) return [];
+    try {
+      return JSON.parse(this.mediaFramesJson) as string[];
     } catch {
       return [];
     }

@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
-import { database, Exercise, User } from '../database';
+import {
+  database,
+  Exercise,
+  PlanExercise,
+  User,
+  WorkoutPlan,
+  WorkoutSet,
+} from '../database';
 import seed from '../assets/seed.json';
+import seedPlans from '../assets/seed-plans.json';
+import { isImagelessOrphan } from './use-initial-seed.helpers';
 
 type SeedExercise = {
   dataset_id: string;
@@ -12,7 +21,14 @@ type SeedExercise = {
   target: string;
   secondary_muscles: string[];
   instructions: string;
+  media_frames?: string[];
   is_custom: false;
+};
+
+type SeedPlan = {
+  name: string;
+  description: string;
+  exercises: Array<{ dataset_id: string; sets: number; reps: number }>;
 };
 
 const normalizeName = (value: string) =>
@@ -70,7 +86,9 @@ export function useInitialSeed() {
                 exercise.instructions = item.instructions;
                 exercise.datasetId = item.dataset_id;
                 exercise.isCustom = item.is_custom;
-                exercise.mediaUrl = undefined;
+                exercise.mediaFramesJson = item.media_frames
+                  ? JSON.stringify(item.media_frames)
+                  : undefined;
               };
 
               if (existing) {
@@ -84,7 +102,11 @@ export function useInitialSeed() {
                   existing.target === item.target &&
                   existing.secondaryMusclesJson ===
                     JSON.stringify(item.secondary_muscles) &&
-                  existing.instructions === item.instructions;
+                  existing.instructions === item.instructions &&
+                  existing.mediaFramesJson ===
+                    (item.media_frames
+                      ? JSON.stringify(item.media_frames)
+                      : undefined);
                 return unchanged ? [] : [existing.prepareUpdate(applySeed)];
               }
 
@@ -111,6 +133,60 @@ export function useInitialSeed() {
             await database.batch(operations);
           }
         });
+
+        // Drop catalog exercises that have no image, except any still
+        // referenced by a plan or a logged workout (deleting those would
+        // orphan history).
+        const [catalog, planExercises, workoutSets] = await Promise.all([
+          exercises.query().fetch(),
+          database.get<PlanExercise>('plan_exercises').query().fetch(),
+          database.get<WorkoutSet>('workout_sets').query().fetch(),
+        ]);
+        const referenced = new Set<string>([
+          ...planExercises.map((row) => row.exerciseId),
+          ...workoutSets.map((row) => row.exerciseId),
+        ]);
+        const orphans = catalog.filter((exercise) =>
+          isImagelessOrphan(exercise, referenced),
+        );
+        if (orphans.length) {
+          await database.write(async () => {
+            await database.batch(
+              orphans.map((exercise) => exercise.prepareDestroyPermanently()),
+            );
+          });
+        }
+
+        // Starter plans, first run only — never re-create ones the user
+        // deleted or edited.
+        const plans = database.get<WorkoutPlan>('workout_plans');
+        if ((await plans.query().fetchCount()) === 0) {
+          const planExerciseCollection =
+            database.get<PlanExercise>('plan_exercises');
+          await database.write(async () => {
+            const records = [];
+            for (const item of seedPlans as SeedPlan[]) {
+              const plan = plans.prepareCreate((record) => {
+                record.userId = 'local-user';
+                record.name = item.name;
+                record.description = item.description;
+              });
+              records.push(plan);
+              item.exercises.forEach((entry, orderIndex) => {
+                records.push(
+                  planExerciseCollection.prepareCreate((record) => {
+                    record.planId = plan.id;
+                    record.exerciseId = `dataset-${entry.dataset_id}`;
+                    record.targetSets = entry.sets;
+                    record.targetReps = entry.reps;
+                    record.orderIndex = orderIndex;
+                  }),
+                );
+              });
+            }
+            await database.batch(records);
+          });
+        }
 
         if (mounted) setIsReady(true);
       } catch (cause) {

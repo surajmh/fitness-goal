@@ -84,5 +84,16 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      toVersion: 5,
+      steps: [
+        addColumns({
+          table: 'exercises',
+          columns: [
+            { name: 'media_frames', type: 'string', isOptional: true },
+          ],
+        }),
+      ],
+    },
   ],
 });

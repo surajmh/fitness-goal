@@ -6,7 +6,7 @@ const timestamps = [
 ];
 
 export const schema = appSchema({
-  version: 4,
+  version: 5,
   tables: [
     tableSchema({
       name: 'users',
@@ -40,6 +40,7 @@ export const schema = appSchema({
         { name: 'target', type: 'string', isOptional: true, isIndexed: true },
         { name: 'secondary_muscles', type: 'string', isOptional: true },
         { name: 'instructions', type: 'string', isOptional: true },
+        { name: 'media_frames', type: 'string', isOptional: true },
         ...timestamps,
       ],
     }),

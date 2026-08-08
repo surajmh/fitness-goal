@@ -1,16 +1,15 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G, Polyline, Polygon, Line, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
+import { useColorScheme } from 'react-native';
+import Svg, { Path, Circle, Rect, G, Polyline, Line, type SvgProps } from 'react-native-svg';
 export interface IconProps extends SvgProps {
   color?: string;
   size?: number;
   strokeWidth?: number;
 }
-export function BrandMark({
-  color = 'currentColor',
-  size = 24,
-  strokeWidth = 1.5,
-  fill = 'none',
-  ...props
-}: IconProps) {
-  return <Svg width={size} height={size} accessibilityLabel="FitnessGoal" viewBox="0 0 48 48" fill="none" {...props}><Defs><LinearGradient id="gitfit-ring" x1={0} y1={0} x2={1} y2={1}><Stop offset={0} stopColor="#FF3858" /><Stop offset={0.36} stopColor="#38D16A" /><Stop offset={0.68} stopColor="#1689F8" /><Stop offset={1} stopColor="#B45CF2" /></LinearGradient></Defs><Rect x={2.5} y={2.5} width={43} height={43} rx={12} fill="#10151D" stroke="#343D4B" strokeWidth={1.5} /><Circle cx={24} cy={24} r={16} fill="none" stroke="url(#gitfit-ring)" strokeWidth={3} /><Circle cx={24} cy={24} r={11.5} fill="none" stroke="#38D16A" strokeOpacity={0.72} strokeWidth={2} /><Path d="M24 35V14m0 8-6-5m6 11 7-7m-7 2 6-5" fill="none" stroke="#94E8D1" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /><Circle cx={24} cy={13.5} r={2} fill="#38D16A" /><Circle cx={17.5} cy={16.5} r={1.8} fill="#FF3858" /><Circle cx={31.5} cy={20.5} r={1.8} fill="#1689F8" /><Circle cx={30.5} cy={17.5} r={1.8} fill="#B45CF2" /></Svg>;
+export function BrandMark({ size = 24, ...props }: IconProps) {
+  const dark = useColorScheme() === 'dark';
+  const tile = dark ? '#16181D' : '#FFFFFF';
+  const border = dark ? '#2A2E37' : '#E2E5EA';
+  const green = dark ? '#2FD08A' : '#0E8F63';
+  return <Svg width={size} height={size} accessibilityLabel="Fitness Goal" viewBox="0 0 1024 1024" fill="none" {...props}><Rect x={40} y={40} width={944} height={944} rx={240} fill={tile} stroke={border} strokeWidth={8} /><G transform="translate(512 512) scale(0.82) translate(-512 -512)"><G fill="none" stroke={green} strokeLinecap="round"><Polyline points="150,720 300,350 445,560 630,300" strokeWidth={66} strokeLinejoin="miter" strokeMiterlimit={6} /><Path d="M 862 466 A 176 176 0 1 0 862 614" strokeWidth={64} /><Line x1={866} y1={540} x2={792} y2={540} strokeWidth={56} /><Circle cx={700} cy={540} r={74} strokeWidth={30} /></G><Circle cx={700} cy={540} r={30} fill={green} /></G></Svg>;
 }

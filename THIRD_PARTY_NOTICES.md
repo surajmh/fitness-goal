@@ -11,5 +11,12 @@ Copyright © 2026 Hasan Emir Yıldırım.
 
 The dataset text and structure are used under the MIT License. This application
 does not include or redistribute the repository's Gym Visual images or animated
-GIFs. All exercise illustrations and motion in this application are original,
-app-owned vector artwork.
+GIFs.
+
+## Exercise Movement Photos
+
+Start/end movement photos referenced by `media_frames` are sourced from
+[yuhonas/free-exercise-db](https://github.com/yuhonas/free-exercise-db) at commit
+`b0eed061e1c832b3ed815fbaa4b45b3cdc14df49`, released into the public domain under
+the Unlicense. Exercises without a matching photo use original, app-owned vector
+artwork and native-driver motion.

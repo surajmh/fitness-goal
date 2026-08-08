@@ -1,0 +1,185 @@
+[
+  {
+    "name": "Beginner · Full Body Foundation",
+    "description": "2-3x/week with a rest day between. Squat, hinge, push, pull and brace in one session. Stop 2 reps shy of failure and add load only once all sets hit the top of the range.",
+    "exercises": [
+      { "dataset_id": "1760", "sets": 3, "reps": 10 },
+      { "dataset_id": "1459", "sets": 3, "reps": 10 },
+      { "dataset_id": "0493", "sets": 3, "reps": 10 },
+      { "dataset_id": "0292", "sets": 3, "reps": 10 },
+      { "dataset_id": "3665", "sets": 3, "reps": 30 }
+    ]
+  },
+  {
+    "name": "Beginner · Upper Body Basics",
+    "description": "One push, one pull, then arms. 60-90s rest. Keep the dumbbells light enough that the last rep of every set is still clean.",
+    "exercises": [
+      { "dataset_id": "0289", "sets": 3, "reps": 10 },
+      { "dataset_id": "2330", "sets": 3, "reps": 10 },
+      { "dataset_id": "0405", "sets": 3, "reps": 10 },
+      { "dataset_id": "0293", "sets": 3, "reps": 10 },
+      { "dataset_id": "0294", "sets": 2, "reps": 12 },
+      { "dataset_id": "0362", "sets": 2, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Beginner · Leg Day Starter",
+    "description": "Knee-dominant first, hip-dominant second, calves last. 60-90s rest. Expect soreness the first fortnight - keep the range of motion honest rather than chasing weight.",
+    "exercises": [
+      { "dataset_id": "1760", "sets": 3, "reps": 10 },
+      { "dataset_id": "0336", "sets": 3, "reps": 10 },
+      { "dataset_id": "1459", "sets": 3, "reps": 10 },
+      { "dataset_id": "0599", "sets": 3, "reps": 12 },
+      { "dataset_id": "0417", "sets": 3, "reps": 15 }
+    ]
+  },
+  {
+    "name": "Beginner · Back Builder",
+    "description": "Vertical pull, horizontal pull, then posterior chain. Use the assisted pull-up machine until you own 3 sets of 8, then move to bodyweight.",
+    "exercises": [
+      { "dataset_id": "2330", "sets": 3, "reps": 10 },
+      { "dataset_id": "0292", "sets": 3, "reps": 10 },
+      { "dataset_id": "0017", "sets": 3, "reps": 8 },
+      { "dataset_id": "0489", "sets": 3, "reps": 12 },
+      { "dataset_id": "0095", "sets": 2, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Beginner · Cardio Kickstart",
+    "description": "Easy aerobic base plus light calisthenics. Treadmill and elliptical entries are minutes, not reps. Hold a conversational pace - you should be able to talk throughout.",
+    "exercises": [
+      { "dataset_id": "3666", "sets": 1, "reps": 10 },
+      { "dataset_id": "3223", "sets": 3, "reps": 20 },
+      { "dataset_id": "1460", "sets": 3, "reps": 20 },
+      { "dataset_id": "0493", "sets": 3, "reps": 10 },
+      { "dataset_id": "2141", "sets": 1, "reps": 10 }
+    ]
+  },
+  {
+    "name": "Intermediate · Full Body Power",
+    "description": "3x/week. Barbell compounds first while you are fresh, accessories after. 2-3min rest on the big three, 90s on the rest.",
+    "exercises": [
+      { "dataset_id": "0043", "sets": 4, "reps": 8 },
+      { "dataset_id": "0025", "sets": 4, "reps": 8 },
+      { "dataset_id": "0027", "sets": 4, "reps": 8 },
+      { "dataset_id": "0085", "sets": 3, "reps": 10 },
+      { "dataset_id": "0426", "sets": 3, "reps": 10 },
+      { "dataset_id": "3665", "sets": 3, "reps": 45 }
+    ]
+  },
+  {
+    "name": "Intermediate · Upper Body Strength",
+    "description": "Heavy press and pull up front, hypertrophy work behind it. If you cannot get 8 clean pull-ups, use a band and keep the volume.",
+    "exercises": [
+      { "dataset_id": "0025", "sets": 4, "reps": 8 },
+      { "dataset_id": "0652", "sets": 4, "reps": 8 },
+      { "dataset_id": "0314", "sets": 3, "reps": 10 },
+      { "dataset_id": "0293", "sets": 3, "reps": 10 },
+      { "dataset_id": "0405", "sets": 3, "reps": 10 },
+      { "dataset_id": "0334", "sets": 3, "reps": 12 },
+      { "dataset_id": "0294", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Intermediate · Leg Strength",
+    "description": "Squat and hinge are the session; everything after is accessory. Add 2.5kg only when all 4 sets hit 8 reps with clean depth.",
+    "exercises": [
+      { "dataset_id": "0043", "sets": 4, "reps": 8 },
+      { "dataset_id": "0085", "sets": 4, "reps": 8 },
+      { "dataset_id": "0739", "sets": 3, "reps": 12 },
+      { "dataset_id": "0336", "sets": 3, "reps": 10 },
+      { "dataset_id": "0599", "sets": 3, "reps": 12 },
+      { "dataset_id": "1372", "sets": 4, "reps": 15 }
+    ]
+  },
+  {
+    "name": "Intermediate · Back & Pull",
+    "description": "Deadlift heavy and low-rep, then vertical and horizontal pulls. Brace hard and reset every deadlift rep from a dead stop.",
+    "exercises": [
+      { "dataset_id": "0032", "sets": 4, "reps": 6 },
+      { "dataset_id": "0652", "sets": 4, "reps": 8 },
+      { "dataset_id": "0027", "sets": 4, "reps": 8 },
+      { "dataset_id": "2330", "sets": 3, "reps": 10 },
+      { "dataset_id": "0076", "sets": 3, "reps": 12 },
+      { "dataset_id": "0489", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Intermediate · Conditioning Circuit",
+    "description": "Circuit style: move between exercises with minimal rest, then 90s between rounds. Scale the round count before you scale the reps.",
+    "exercises": [
+      { "dataset_id": "3223", "sets": 4, "reps": 25 },
+      { "dataset_id": "0514", "sets": 4, "reps": 15 },
+      { "dataset_id": "0662", "sets": 4, "reps": 15 },
+      { "dataset_id": "3360", "sets": 4, "reps": 20 },
+      { "dataset_id": "1460", "sets": 4, "reps": 20 },
+      { "dataset_id": "0550", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Advanced · Full Body Performance",
+    "description": "4-6x/week split across sessions. Heavy 5x5 on the main lifts at 80-85%, 3min rest. Deload every 4th week by cutting the sets in half.",
+    "exercises": [
+      { "dataset_id": "0032", "sets": 5, "reps": 5 },
+      { "dataset_id": "0043", "sets": 5, "reps": 5 },
+      { "dataset_id": "0025", "sets": 5, "reps": 5 },
+      { "dataset_id": "0652", "sets": 4, "reps": 10 },
+      { "dataset_id": "0426", "sets": 4, "reps": 8 },
+      { "dataset_id": "0550", "sets": 3, "reps": 12 },
+      { "dataset_id": "2135", "sets": 3, "reps": 45 }
+    ]
+  },
+  {
+    "name": "Advanced · Upper Body Hypertrophy",
+    "description": "High volume, 60-90s rest. Take the final set of each accessory to within 1 rep of failure. Add weight to the chin-ups once you clear 10 clean reps.",
+    "exercises": [
+      { "dataset_id": "0025", "sets": 5, "reps": 6 },
+      { "dataset_id": "1326", "sets": 4, "reps": 10 },
+      { "dataset_id": "0314", "sets": 4, "reps": 10 },
+      { "dataset_id": "0027", "sets": 4, "reps": 10 },
+      { "dataset_id": "0405", "sets": 4, "reps": 10 },
+      { "dataset_id": "0334", "sets": 4, "reps": 15 },
+      { "dataset_id": "0830", "sets": 3, "reps": 12 },
+      { "dataset_id": "0294", "sets": 3, "reps": 12 }
+    ]
+  },
+  {
+    "name": "Advanced · Leg Hypertrophy",
+    "description": "Highest-volume session in the library - do not stack it the day before a heavy pull. Explosive work last so it never eats into the heavy squats.",
+    "exercises": [
+      { "dataset_id": "0043", "sets": 5, "reps": 6 },
+      { "dataset_id": "0085", "sets": 4, "reps": 8 },
+      { "dataset_id": "0739", "sets": 4, "reps": 12 },
+      { "dataset_id": "0336", "sets": 4, "reps": 12 },
+      { "dataset_id": "0599", "sets": 4, "reps": 12 },
+      { "dataset_id": "1372", "sets": 5, "reps": 15 },
+      { "dataset_id": "0053", "sets": 3, "reps": 8 }
+    ]
+  },
+  {
+    "name": "Advanced · Back Mass",
+    "description": "Heavy deadlift, then vertical and horizontal volume. Straps are fine once grip becomes the limiter - the back is the target, not the forearms.",
+    "exercises": [
+      { "dataset_id": "0032", "sets": 5, "reps": 5 },
+      { "dataset_id": "0652", "sets": 5, "reps": 10 },
+      { "dataset_id": "0027", "sets": 4, "reps": 8 },
+      { "dataset_id": "2330", "sets": 4, "reps": 12 },
+      { "dataset_id": "0073", "sets": 3, "reps": 12 },
+      { "dataset_id": "0095", "sets": 4, "reps": 12 },
+      { "dataset_id": "0489", "sets": 3, "reps": 15 }
+    ]
+  },
+  {
+    "name": "Advanced · Metabolic Conditioning",
+    "description": "5 rounds, 60s rest between rounds only. Battling ropes and bear crawl entries are seconds. Cap it at 25 minutes - if you can go longer you are not working hard enough.",
+    "exercises": [
+      { "dataset_id": "0550", "sets": 5, "reps": 15 },
+      { "dataset_id": "0514", "sets": 5, "reps": 20 },
+      { "dataset_id": "1306", "sets": 5, "reps": 12 },
+      { "dataset_id": "3360", "sets": 5, "reps": 25 },
+      { "dataset_id": "0128", "sets": 5, "reps": 30 },
+      { "dataset_id": "2459", "sets": 4, "reps": 10 },
+      { "dataset_id": "3223", "sets": 4, "reps": 30 }
+    ]
+  }
+]

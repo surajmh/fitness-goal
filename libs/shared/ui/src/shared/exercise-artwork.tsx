@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Image } from 'react-native';
 import { ExerciseFigure, type ExerciseFigureVariant } from '../icons';
 import type { Exercise } from '@fitnessgoal/data-access/workout';
 import { useCSSVariable, View } from '../primitives';
@@ -10,18 +12,30 @@ export function ExerciseArtwork({
   compact?: boolean;
 }) {
   const { color, variant } = useExerciseVisual(exercise);
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const photo = exercise?.mediaFrames[0];
 
   return (
     <View
-      className={`items-center justify-center rounded-lg border border-outline bg-surface-raised ${
+      className={`items-center justify-center overflow-hidden rounded-lg border border-outline bg-surface-raised ${
         compact ? 'h-11 w-12' : 'h-12 w-14'
       }`}
     >
-      <ExerciseFigure
-        color={color}
-        size={compact ? 36 : 42}
-        variant={variant}
-      />
+      {photo && !photoFailed ? (
+        <Image
+          accessibilityIgnoresInvertColors
+          onError={() => setPhotoFailed(true)}
+          resizeMode="cover"
+          source={{ uri: photo }}
+          style={{ height: '100%', width: '100%' }}
+        />
+      ) : (
+        <ExerciseFigure
+          color={color}
+          size={compact ? 36 : 42}
+          variant={variant}
+        />
+      )}
     </View>
   );
 }

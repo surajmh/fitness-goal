@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Animated, Easing } from 'react-native';
+import {
+  AccessibilityInfo,
+  Animated,
+  Easing,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import { ExerciseFigure } from '../icons';
 import type { Exercise } from '@fitnessgoal/data-access/workout';
 import { Text, View } from '../primitives';
@@ -8,7 +14,10 @@ import { useExerciseVisual } from './exercise-artwork';
 export function ExerciseMotionPreview({ exercise }: { exercise: Exercise }) {
   const { color, variant } = useExerciseVisual(exercise);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [photoFailed, setPhotoFailed] = useState(false);
   const progress = useRef(new Animated.Value(0)).current;
+  const frames = exercise.mediaFrames;
+  const showPhotos = frames.length > 0 && !photoFailed;
 
   useEffect(() => {
     AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion);
@@ -117,22 +126,44 @@ export function ExerciseMotionPreview({ exercise }: { exercise: Exercise }) {
       accessibilityRole="image"
       className="mb-3 flex-row items-center gap-4 overflow-hidden rounded-xl border border-outline bg-surface p-4"
     >
-      <View className="h-24 w-32 items-center justify-center">
-        <Animated.View
-          style={[
-            {
-              position: 'absolute',
-              width: 86,
-              height: 86,
-              borderRadius: 43,
-              backgroundColor: color,
-            },
-            haloStyle,
-          ]}
-        />
-        <Animated.View style={motionStyle}>
-          <ExerciseFigure color={color} size={112} variant={variant} />
-        </Animated.View>
+      <View className="h-24 w-32 items-center justify-center overflow-hidden rounded-lg">
+        {showPhotos ? (
+          <>
+            <Image
+              accessibilityIgnoresInvertColors
+              onError={() => setPhotoFailed(true)}
+              resizeMode="cover"
+              source={{ uri: frames[0] }}
+              style={StyleSheet.absoluteFill}
+            />
+            {frames.length > 1 ? (
+              <Animated.Image
+                accessibilityIgnoresInvertColors
+                resizeMode="cover"
+                source={{ uri: frames[frames.length - 1] }}
+                style={[StyleSheet.absoluteFill, { opacity: progress }]}
+              />
+            ) : null}
+          </>
+        ) : (
+          <>
+            <Animated.View
+              style={[
+                {
+                  position: 'absolute',
+                  width: 86,
+                  height: 86,
+                  borderRadius: 43,
+                  backgroundColor: color,
+                },
+                haloStyle,
+              ]}
+            />
+            <Animated.View style={motionStyle}>
+              <ExerciseFigure color={color} size={112} variant={variant} />
+            </Animated.View>
+          </>
+        )}
       </View>
       <View className="min-w-0 flex-1">
         <Text className="text-sm font-semibold text-primary">
