@@ -2280,14 +2280,14 @@ SPEC CHECKSUMS:
   ExpoFont: 274487aa78f8c65d6551e2558eca3ec6ce3432ce
   ExpoKeepAwake: 359c47a1d9ccc3a3c519bca6e39562cce230c5bb
   ExpoLogBox: cdad5c9402a186574fb5924ea91df1f08ba9a98a
-  ExpoModulesCore: 3276a86f6a1b877236b2bfaef29079a0981d350a
+  ExpoModulesCore: a77bcb2945df806d6bd8d5240cbfd6437ea13828
   ExpoModulesJSI: e62656cfaffb5aeb3fdc1dd2bc49f77e87ed2261
   ExpoModulesWorklets: 3aaf91bb08abf910858592221480d6519f0daa1e
   ExpoNotifications: ac87d6f9e52a4c855775e73f692ac1e95ca63f27
   ExpoSplashScreen: 0c06099febe733279021ca62b0b7534005a43c93
   ExpoSystemUI: 8f4fb641c6a6ebe2a01dda0fbd3fdd952ab5823a
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
-  hermes-engine: e3cdebf29dd379cc4d8c8bac50c83c4562e0e4b5
+  hermes-engine: 449cf2e15cfb7ea3be0ddd75b8fbc4a87ad53d19
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
   RCTRequired: 9f3a7e5645d4bc3f551593de7550bb66ab6e42bc
   RCTSwiftUI: 239ed2eb9e73de5a6f518810630f0c95e01c8702
@@ -2296,7 +2296,7 @@ SPEC CHECKSUMS:
   React: e2dc35338068bbd299c66f043ae0d7f25de8499e
   React-callinvoker: 28b25d21b124c26cebaea713ba7d801b9351dc48
   React-Core: 02ed7d2ffb70437bdf2aba074a13078a7b0b9ff0
-  React-Core-prebuilt: 78ade325b7a798ea9f9367dd6eed78dcafcab9bd
+  React-Core-prebuilt: 711943049cb20af44a4fe525c63b31a22a373237
   React-CoreModules: b3a5a42dadcde3b5d47b325bd912eb2ced89e146
   React-cxxreact: fe8f88dda044e5905e99a00f41b7a874c3908716
   React-debug: 92944dc4d89f56d640e75498266cbde557a48189
@@ -2359,7 +2359,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 25c9c516839be2c5e3d3344f95dc7da5f7e63fc2
   ReactCodegen: dfe41c3f92bdf782bcf9b2c9d7c12cb9cfd82cb7
   ReactCommon: 7dfc3250793bf36cf221096ff59e1179e13eef7f
-  ReactNativeDependencies: 8239e44ff60a7a2304b1267cec1781c3d36cd5cf
+  ReactNativeDependencies: 309219c78fa4a17253b65a2dc2aa5ca7a398a855
   RNSVG: 0e52210d4d43165e7e2cf9c890a9848b27e513ac
   simdjson: 7bb9e33d87737cec966e7b427773c67baa4458fe
   WatermelonDB: 75e467adbaf2cb2809780fb3eda7ce4964e11778

@@ -4,10 +4,7 @@
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": {
-      "light": "./assets/images/icon-light.png",
-      "dark": "./assets/images/icon-dark.png"
-    },
+    "icon": "./assets/images/icon-light.png",
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -40,7 +37,7 @@
           "image": "./assets/images/splash-light.png",
           "imageWidth": 180,
           "resizeMode": "contain",
-          "backgroundColor": "#FFFFFF",
+          "backgroundColor": "#16181D",
           "dark": {
             "image": "./assets/images/splash-dark.png",
             "backgroundColor": "#16181D"
