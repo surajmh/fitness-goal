@@ -9,7 +9,7 @@ export function FilterChip({ label, selected, onPress }: FilterChipProps) {
       accessibilityRole="button"
       accessibilityState={{ selected }}
       className={`min-h-12 flex-row items-center gap-1.5 rounded-full px-4 ${
-        selected ? 'bg-primary' : 'bg-surface'
+        selected ? 'bg-primary' : 'border border-outline'
       }`}
       onPress={onPress}
     >

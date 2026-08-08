@@ -7,19 +7,28 @@ jest.mock('expo-status-bar', () => ({ StatusBar: 'StatusBar' }));
 jest.mock('react-native-safe-area-context', () => ({
   SafeAreaView: 'SafeAreaView',
 }));
-jest.mock('@fitnessgoal/feature/active-workout', () => ({ ActiveWorkoutScreen: 'ActiveWorkoutScreen' }));
-jest.mock('@fitnessgoal/feature/history', () => ({ HistoryScreen: 'HistoryScreen' }));
+jest.mock('@fitnessgoal/feature/active-workout', () => ({
+  ActiveWorkoutScreen: 'ActiveWorkoutScreen',
+}));
+jest.mock('@fitnessgoal/feature/history', () => ({
+  HistoryScreen: 'HistoryScreen',
+}));
 jest.mock('@fitnessgoal/feature/plans', () => ({ PlansScreen: 'PlansScreen' }));
-jest.mock('@fitnessgoal/feature/settings', () => ({ SettingsScreen: 'SettingsScreen' }));
+jest.mock('@fitnessgoal/feature/settings', () => ({
+  SettingsScreen: 'SettingsScreen',
+}));
 jest.mock('@fitnessgoal/feature/today', () => ({ TodayScreen: 'TodayScreen' }));
 jest.mock('@fitnessgoal/shared/ui', () => ({
   ClipboardList: 'ClipboardList',
+  HistoryFilled: 'HistoryFilled',
   HistoryIcon: 'HistoryIcon',
+  HomeFilled: 'HomeFilled',
   HomeIcon: 'HomeIcon',
+  PlanFilled: 'PlanFilled',
   PlanIcon: 'PlanIcon',
   Pressable: 'Pressable',
   PrimaryButton: 'PrimaryButton',
-  ProgressIcon: 'ProgressIcon',
+  SettingsFilled: 'SettingsFilled',
   SettingsIcon: 'SettingsIcon',
   Text: 'Text',
   useCSSVariable: () => '#000',

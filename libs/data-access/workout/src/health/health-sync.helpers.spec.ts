@@ -27,4 +27,14 @@ describe('health sync helpers', () => {
   it('handles an absent previous sync', () => {
     expect(formatLastHealthSync()).toBe('Not synced yet');
   });
+
+  it('shows the time for today and the date before that', () => {
+    const now = new Date('2026-08-08T20:00:00');
+    expect(
+      formatLastHealthSync(new Date('2026-08-08T08:12:00').getTime(), now),
+    ).toBe('Last synced 08:12');
+    expect(
+      formatLastHealthSync(new Date('2026-08-06T08:12:00').getTime(), now),
+    ).toBe('Last synced 6 Aug');
+  });
 });

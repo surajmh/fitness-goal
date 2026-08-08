@@ -1,5 +1,17 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G, Polyline, Polygon, Line, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
+import Svg, {
+  Path,
+  Circle,
+  Rect,
+  G,
+  Polyline,
+  Polygon,
+  Line,
+  Defs,
+  LinearGradient,
+  Stop,
+  type SvgProps,
+} from 'react-native-svg';
 export interface IconProps extends SvgProps {
   color?: string;
   size?: number;
@@ -8,9 +20,25 @@ export interface IconProps extends SvgProps {
 export function Settings({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.5,
-  fill = 'none',
+  strokeWidth = 1.8,
   ...props
 }: IconProps) {
-  return <Svg width={size} height={size} accessibilityElementsHidden viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...props}><Circle cx={12} cy={12} r={3} /><Path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></Svg>;
+  return (
+    <Svg
+      width={size}
+      height={size}
+      accessibilityElementsHidden
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <Path d="M4 8h9M17 8h3M4 16h3M11 16h9" />
+      <Circle cx={15} cy={8} r={2.4} />
+      <Circle cx={9} cy={16} r={2.4} />
+    </Svg>
+  );
 }

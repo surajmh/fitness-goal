@@ -6,14 +6,25 @@ export function getHealthProviderName(availability: HealthAvailability) {
   return 'Health data';
 }
 
-export function formatLastHealthSync(timestamp?: number) {
+/**
+ * "Last synced 08:12" for a sync from today, "Last synced 6 Aug" before that —
+ * a wall-clock time is only meaningful while the day is still the same one.
+ */
+export function formatLastHealthSync(timestamp?: number, now = new Date()) {
   if (!timestamp) return 'Not synced yet';
-  return `Last synced ${new Date(timestamp).toLocaleString()}`;
+  const date = new Date(timestamp);
+  const when =
+    date.toDateString() === now.toDateString()
+      ? date.toLocaleTimeString('en-AU', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        })
+      : date.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+  return `Last synced ${when}`;
 }
 
-export function getHealthAvailabilityMessage(
-  availability: HealthAvailability,
-) {
+export function getHealthAvailabilityMessage(availability: HealthAvailability) {
   if (availability.available) return '';
   if (availability.requiresInstall) {
     return 'Install or update Health Connect to sync Android health data.';

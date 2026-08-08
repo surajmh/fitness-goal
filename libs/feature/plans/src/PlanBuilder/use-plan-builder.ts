@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, BackHandler } from 'react-native';
+import type { PlanDifficulty } from '@fitnessgoal/data-access/workout';
 import {
   hasInvalidTargets,
   moveSelectedExercise,
@@ -12,6 +13,7 @@ export function usePlanBuilder({ onCancel, onSave }: UsePlanBuilderOptions) {
   const [name, setName] = useState('');
   const [nameTouched, setNameTouched] = useState(false);
   const [description, setDescription] = useState('');
+  const [difficulty, setDifficulty] = useState<PlanDifficulty>('intermediate');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [targets, setTargets] = useState<PlanTargets>({});
   const [saving, setSaving] = useState(false);
@@ -78,6 +80,7 @@ export function usePlanBuilder({ onCancel, onSave }: UsePlanBuilderOptions) {
       await onSave({
         name: name.trim(),
         description: description.trim(),
+        difficulty,
         exercises: selectedIds.map((exerciseId) => ({
           exerciseId,
           targetSets: Number(targets[exerciseId]?.sets),
@@ -94,6 +97,7 @@ export function usePlanBuilder({ onCancel, onSave }: UsePlanBuilderOptions) {
   return {
     back,
     description,
+    difficulty,
     error,
     moveExercise: (index: number, direction: -1 | 1) =>
       setSelectedIds((ids) => moveSelectedExercise(ids, index, direction)),
@@ -111,6 +115,7 @@ export function usePlanBuilder({ onCancel, onSave }: UsePlanBuilderOptions) {
     saving,
     selectedIds,
     setDescription,
+    setDifficulty,
     setName,
     setNameTouched,
     setTarget: (id: string, key: 'reps' | 'sets', value: string) =>

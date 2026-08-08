@@ -8,4 +8,3 @@ export type RowProps = {
   trailing?: React.ReactNode;
   border?: boolean;
 };
-

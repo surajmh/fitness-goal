@@ -5,6 +5,7 @@ import {
   ChevronUp,
   ExerciseArtwork,
   FeedbackBanner,
+  FilterChip,
   Page,
   Pressable,
   PrimaryButton,
@@ -15,6 +16,7 @@ import {
   useCSSVariable,
   View,
 } from '@fitnessgoal/shared/ui';
+import { PLAN_DIFFICULTIES } from '../plans-screen.helpers';
 import { ExercisePicker } from '@fitnessgoal/feature/exercise-picker';
 import { hasInvalidTargets } from '../plans-screen.helpers';
 import type { PlanBuilderProps } from './plan-builder.types';
@@ -73,6 +75,19 @@ export function PlanBuilder(props: PlanBuilderProps) {
                 Enter a plan name to continue.
               </Text>
             ) : null}
+            <Text className="mb-2 mt-5 text-base font-semibold text-ink">
+              Difficulty
+            </Text>
+            <View className="flex-row gap-2">
+              {PLAN_DIFFICULTIES.map((level) => (
+                <FilterChip
+                  key={level.key}
+                  label={level.label}
+                  onPress={() => builder.setDifficulty(level.key)}
+                  selected={builder.difficulty === level.key}
+                />
+              ))}
+            </View>
             <Text className="mb-2 mt-5 text-base font-semibold text-ink">
               Description
             </Text>

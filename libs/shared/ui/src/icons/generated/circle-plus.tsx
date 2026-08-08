@@ -1,5 +1,17 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect, G, Polyline, Polygon, Line, Defs, LinearGradient, Stop, type SvgProps } from 'react-native-svg';
+import Svg, {
+  Path,
+  Circle,
+  Rect,
+  G,
+  Polyline,
+  Polygon,
+  Line,
+  Defs,
+  LinearGradient,
+  Stop,
+  type SvgProps,
+} from 'react-native-svg';
 export interface IconProps extends SvgProps {
   color?: string;
   size?: number;
@@ -8,9 +20,24 @@ export interface IconProps extends SvgProps {
 export function CirclePlus({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.5,
-  fill = 'none',
+  strokeWidth = 1.8,
   ...props
 }: IconProps) {
-  return <Svg width={size} height={size} accessibilityElementsHidden viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...props}><Circle cx={12} cy={12} r={9} /><Line x1={12} y1={8} x2={12} y2={16} /><Line x1={8} y1={12} x2={16} y2={12} /></Svg>;
+  return (
+    <Svg
+      width={size}
+      height={size}
+      accessibilityElementsHidden
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <Circle cx={12} cy={12} r={9} />
+      <Path d="M12 8v8M8 12h8" />
+    </Svg>
+  );
 }

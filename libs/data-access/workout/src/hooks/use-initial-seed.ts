@@ -9,7 +9,11 @@ import {
 } from '../database';
 import seed from '../assets/seed.json';
 import seedPlans from '../assets/seed-plans.json';
-import { isImagelessOrphan } from './use-initial-seed.helpers';
+import type { PlanDifficulty } from '../constants';
+import {
+  isImagelessOrphan,
+  splitLegacyPlanName,
+} from './use-initial-seed.helpers';
 
 type SeedExercise = {
   dataset_id: string;
@@ -27,6 +31,7 @@ type SeedExercise = {
 
 type SeedPlan = {
   name: string;
+  difficulty: PlanDifficulty;
   description: string;
   exercises: Array<{ dataset_id: string; sets: number; reps: number }>;
 };
@@ -160,7 +165,27 @@ export function useInitialSeed() {
         // Starter plans, first run only — never re-create ones the user
         // deleted or edited.
         const plans = database.get<WorkoutPlan>('workout_plans');
-        if ((await plans.query().fetchCount()) === 0) {
+        const existingPlans = await plans.query().fetch();
+
+        // One-off: lift the difficulty out of names seeded before the column
+        // existed. Once set, the guard below never matches again.
+        const legacyPlans = existingPlans.flatMap((plan) => {
+          if (plan.difficulty) return [];
+          const split = splitLegacyPlanName(plan.name);
+          return split
+            ? [
+                plan.prepareUpdate((record) => {
+                  record.name = split.name;
+                  record.difficulty = split.difficulty;
+                }),
+              ]
+            : [];
+        });
+        if (legacyPlans.length) {
+          await database.write(() => database.batch(legacyPlans));
+        }
+
+        if (existingPlans.length === 0) {
           const planExerciseCollection =
             database.get<PlanExercise>('plan_exercises');
           await database.write(async () => {
@@ -170,6 +195,7 @@ export function useInitialSeed() {
                 record.userId = 'local-user';
                 record.name = item.name;
                 record.description = item.description;
+                record.difficulty = item.difficulty;
               });
               records.push(plan);
               item.exercises.forEach((entry, orderIndex) => {

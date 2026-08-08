@@ -24,8 +24,7 @@ export interface IconProps extends SvgProps {
 export function ${variables.componentName}({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.5,
-  fill = 'none',
+  strokeWidth = 1.8,
   ...props
 }: IconProps) {
   return (

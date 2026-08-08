@@ -1,4 +1,25 @@
-import type { ParsedSetValues, SetValues } from './set-editor.types';
+import type {
+  ParsedSetValues,
+  SetFieldState,
+  SetValues,
+} from './set-editor.types';
+
+const FIELD_BASE =
+  'min-h-12 rounded-xl px-3 text-xl font-bold tabular-nums leading-none';
+
+/**
+ * The four set-row field states from the design system: completed sets tint
+ * with success-soft, the focused field takes a 2pt primary border, and an
+ * untouched field stays a dashed outline so an empty row reads as "not yet".
+ */
+export function fieldClassName({ completed, focused, empty }: SetFieldState) {
+  if (completed) return `${FIELD_BASE} bg-success-soft text-muted`;
+  if (focused)
+    return `${FIELD_BASE} border-2 border-primary bg-surface-raised text-ink`;
+  if (empty)
+    return `${FIELD_BASE} border border-dashed border-outline text-placeholder-ink`;
+  return `${FIELD_BASE} border border-outline bg-surface-raised text-ink`;
+}
 
 export function parseSetValues(values: SetValues): ParsedSetValues {
   return {

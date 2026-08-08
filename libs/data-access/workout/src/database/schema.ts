@@ -6,7 +6,7 @@ const timestamps = [
 ];
 
 export const schema = appSchema({
-  version: 5,
+  version: 6,
   tables: [
     tableSchema({
       name: 'users',
@@ -50,6 +50,7 @@ export const schema = appSchema({
         { name: 'user_id', type: 'string', isIndexed: true },
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string' },
+        { name: 'difficulty', type: 'string', isIndexed: true },
         ...timestamps,
       ],
     }),

@@ -20,7 +20,9 @@ jest.mock('@fitnessgoal/shared/ui', () => ({
   useCSSVariable: () => '#000',
   View: 'View',
 }));
-jest.mock('@fitnessgoal/feature/exercise-picker', () => ({ ExercisePicker: 'ExercisePicker' }));
+jest.mock('@fitnessgoal/feature/exercise-picker', () => ({
+  ExercisePicker: 'ExercisePicker',
+}));
 jest.mock('./use-plan-builder', () => ({
   usePlanBuilder: () => ({
     back: jest.fn(),

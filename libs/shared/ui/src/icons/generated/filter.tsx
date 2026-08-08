@@ -1,28 +1,42 @@
 import React from 'react';
-import Svg, { Polygon } from 'react-native-svg';
-import type { IconProps } from './check';
-
+import Svg, {
+  Path,
+  Circle,
+  Rect,
+  G,
+  Polyline,
+  Polygon,
+  Line,
+  Defs,
+  LinearGradient,
+  Stop,
+  type SvgProps,
+} from 'react-native-svg';
+export interface IconProps extends SvgProps {
+  color?: string;
+  size?: number;
+  strokeWidth?: number;
+}
 export function Filter({
   color = 'currentColor',
   size = 24,
-  strokeWidth = 1.5,
-  fill = 'none',
+  strokeWidth = 1.8,
   ...props
 }: IconProps) {
   return (
     <Svg
-      accessibilityElementsHidden
-      fill={fill}
+      width={size}
       height={size}
+      accessibilityElementsHidden
+      viewBox="0 0 24 24"
+      fill="none"
       stroke={color}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={strokeWidth}
-      viewBox="0 0 24 24"
-      width={size}
       {...props}
     >
-      <Polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+      <Path d="M4 6h16M7 12h10M10 18h4" />
     </Svg>
   );
 }

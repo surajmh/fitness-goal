@@ -1,6 +1,15 @@
-import type { Exercise, PlanExercise, WorkoutPlan } from '@fitnessgoal/data-access/workout';
+import type {
+  Exercise,
+  PlanDifficulty,
+  PlanExercise,
+  WorkoutPlan,
+} from '@fitnessgoal/data-access/workout';
 
-export type PlanMetadata = { name: string; description: string };
+export type PlanMetadata = {
+  name: string;
+  description: string;
+  difficulty: PlanDifficulty;
+};
 
 export type PlanDetailProps = {
   entries: PlanExercise[];

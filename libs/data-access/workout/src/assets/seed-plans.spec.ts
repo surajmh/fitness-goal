@@ -14,12 +14,19 @@ describe('seed plans', () => {
   });
 
   it('are grouped under the three difficulty levels', () => {
-    const levels = new Set(seedPlans.map((plan) => plan.name.split(' · ')[0]));
+    const levels = new Set(seedPlans.map((plan) => plan.difficulty));
     expect([...levels].sort()).toEqual([
-      'Advanced',
-      'Beginner',
-      'Intermediate',
+      'advanced',
+      'beginner',
+      'intermediate',
     ]);
+  });
+
+  it('carry the level in the field rather than the name', () => {
+    for (const plan of seedPlans) {
+      expect(plan.name).not.toMatch(/·/);
+      expect(plan.name.trim()).toBe(plan.name);
+    }
   });
 
   it('use sane set and rep targets', () => {

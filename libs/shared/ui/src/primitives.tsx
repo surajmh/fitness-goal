@@ -8,7 +8,7 @@ import {
   View as RNView,
 } from 'react-native';
 import { useCssElement, useNativeVariable } from 'react-native-css';
-import { darkTheme, lightTheme } from './theme';
+import { darkTheme, lightTheme, resolveSemanticStyle } from './theme';
 
 export function useCSSVariable(name: string) {
   const scheme = useColorScheme();
@@ -19,44 +19,14 @@ export function useCSSVariable(name: string) {
 
 function useSemanticStyle(className?: string) {
   const scheme = useColorScheme();
-  return useMemo(() => {
-    const theme = scheme === 'dark' ? darkTheme : lightTheme;
-    if (!className) return undefined;
-    const style: Record<string, string> = {};
-    const has = (token: string) =>
-      className.split(/\s+/).some((item) => item === token);
-
-    if (has('bg-canvas')) style.backgroundColor = theme['--canvas'];
-    if (has('bg-surface')) style.backgroundColor = theme['--surface'];
-    if (has('bg-surface-raised'))
-      style.backgroundColor = theme['--surface-raised'];
-    if (has('bg-primary')) style.backgroundColor = theme['--primary'];
-    if (has('bg-outline')) style.backgroundColor = theme['--outline'];
-    if (has('bg-success')) style.backgroundColor = theme['--success'];
-    if (has('bg-danger')) style.backgroundColor = theme['--danger'];
-    if (has('bg-coral')) style.backgroundColor = theme['--coral'];
-    if (has('bg-lime')) style.backgroundColor = theme['--lime'];
-    if (has('bg-cyan')) style.backgroundColor = theme['--cyan'];
-    if (has('bg-recovery')) style.backgroundColor = theme['--recovery'];
-
-    if (has('text-ink')) style.color = theme['--ink'];
-    if (has('text-muted')) style.color = theme['--muted'];
-    if (has('text-primary')) style.color = theme['--primary'];
-    if (has('text-on-primary')) style.color = theme['--on-primary'];
-    if (has('text-success')) style.color = theme['--success'];
-    if (has('text-danger')) style.color = theme['--danger'];
-    if (has('text-coral')) style.color = theme['--coral'];
-    if (has('text-lime')) style.color = theme['--lime'];
-    if (has('text-cyan')) style.color = theme['--cyan'];
-    if (has('text-recovery')) style.color = theme['--recovery'];
-    if (has('text-on-recovery')) style.color = theme['--on-recovery'];
-
-    if (has('border-outline')) style.borderColor = theme['--outline'];
-    if (has('border-success')) style.borderColor = theme['--success'];
-    if (has('border-danger')) style.borderColor = theme['--danger'];
-
-    return Object.keys(style).length ? style : undefined;
-  }, [className, scheme]);
+  return useMemo(
+    () =>
+      resolveSemanticStyle(
+        className,
+        scheme === 'dark' ? darkTheme : lightTheme,
+      ),
+    [className, scheme],
+  );
 }
 
 function useMergedStyle<T>(style: T, semanticStyle?: object) {

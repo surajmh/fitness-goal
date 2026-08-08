@@ -3,16 +3,19 @@ import {
   duplicateSession,
   startSession,
   useAppState,
+  WEEKLY_SESSION_GOAL,
 } from '@fitnessgoal/data-access/workout';
-import { buildTodaySummary } from './today-screen.helpers';
+import { buildTodaySummary, buildUpNext } from './today-screen.helpers';
 import type { TodayScreenProps } from './today-screen.types';
 
 export function useTodayScreen({
+  plans,
+  planExercises,
   sessions,
   sets,
   activeSessions,
 }: TodayScreenProps) {
-  const { setActiveSessionId, weightUnit } = useAppState();
+  const { setActiveSessionId, weightUnit, restTimerSeconds } = useAppState();
   const [working, setWorking] = useState(false);
   const [message, setMessage] = useState('');
   const summary = buildTodaySummary(sessions, sets);
@@ -38,11 +41,14 @@ export function useTodayScreen({
 
   return {
     ...summary,
+    sessionGoal: WEEKLY_SESSION_GOAL,
     activeSession: activeSessions[0],
     lastSession: sessions[0],
+    upNext: buildUpNext(plans, planExercises, sessions),
     working,
     message,
     weightUnit,
+    restTimerSeconds,
     begin,
     repeat,
     openSession: setActiveSessionId,

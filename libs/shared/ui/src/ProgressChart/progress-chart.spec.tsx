@@ -11,7 +11,7 @@ jest.mock('react-native-svg', () => ({
 jest.mock('../primitives', () => ({ Text: 'Text', View: 'View' }));
 jest.mock('./use-progress-chart', () => ({
   useProgressChart: () => ({
-    primary: '#0af',
+    line: '#0af',
     outline: '#ddd',
     points: [{ x: 12, y: 12 }],
     path: 'M12 12',

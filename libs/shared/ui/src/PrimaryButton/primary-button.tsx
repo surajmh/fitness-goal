@@ -12,12 +12,12 @@ export function PrimaryButton({
   variant = 'primary',
 }: PrimaryButtonProps) {
   const onPrimary = useCSSVariable('--on-primary') as string;
-  const muted = useCSSVariable('--muted') as string;
+  const placeholderInk = useCSSVariable('--placeholder-ink') as string;
   const background =
     variant === 'danger'
       ? 'bg-danger'
       : variant === 'secondary'
-        ? 'bg-surface'
+        ? 'border-[1.5px] border-outline'
         : 'bg-primary';
   return (
     <Pressable
@@ -30,16 +30,16 @@ export function PrimaryButton({
       onPress={onPress}
     >
       {loading ? (
-        <ActivityIndicator color={disabled ? muted : onPrimary} />
+        <ActivityIndicator color={disabled ? placeholderInk : onPrimary} />
       ) : (
         <>
           {icon}
           <Text
-            className={`text-base font-semibold ${
+            className={`text-base font-bold ${
               disabled
-                ? 'text-muted'
+                ? 'text-placeholder-ink'
                 : variant === 'secondary'
-                  ? 'text-primary'
+                  ? 'text-ink'
                   : 'text-on-primary'
             }`}
           >

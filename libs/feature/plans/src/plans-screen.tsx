@@ -5,11 +5,14 @@ import withObservables from '@nozbe/with-observables';
 import {
   EmptyState,
   FeedbackBanner,
+  GroupedList,
   Page,
   Plus,
-  PrimaryButton,
+  Pressable,
   Row,
   ScreenTitle,
+  SectionLabel,
+  Text,
   useCSSVariable,
   View,
 } from '@fitnessgoal/shared/ui';
@@ -17,21 +20,31 @@ import {
   createPlan,
   database,
   deletePlan,
+  estimatePlanMinutes,
   Exercise,
+  isPlanDifficulty,
   PlanExercise,
   startSession,
   updatePlan,
   useAppState,
   WorkoutPlan,
+  WorkoutSession,
 } from '@fitnessgoal/data-access/workout';
 import { PlanBuilder } from './PlanBuilder';
 import { PlanDetail } from './PlanDetail';
+import { countPlanSets, groupPlansByDifficulty } from './plans-screen.helpers';
 import type { PlansScreenProps } from './plans-screen.types';
 import { usePlansScreen } from './use-plans-screen';
 
-function PlansBase({ plans, planExercises, exercises }: PlansScreenProps) {
+function PlansBase({
+  plans,
+  planExercises,
+  exercises,
+  activeSessions,
+}: PlansScreenProps) {
+  const activeSessionPlanId = activeSessions[0]?.planId;
   const onPrimary = useCSSVariable('--on-primary') as string;
-  const { setActiveSessionId } = useAppState();
+  const { setActiveSessionId, restTimerSeconds } = useAppState();
   const {
     building,
     setBuilding,
@@ -59,6 +72,9 @@ function PlansBase({ plans, planExercises, exercises }: PlansScreenProps) {
           await createPlan({
             name: `${selectedPlan.name} copy`,
             description: selectedPlan.description,
+            difficulty: isPlanDifficulty(selectedPlan.difficulty)
+              ? selectedPlan.difficulty
+              : 'intermediate',
             exercises: entries.map((entry) => ({
               exerciseId: entry.exerciseId,
               targetSets: entry.targetSets,
@@ -98,51 +114,74 @@ function PlansBase({ plans, planExercises, exercises }: PlansScreenProps) {
     <Page>
       <ScreenTitle
         title="Plans"
-        subtitle="Build repeatable sessions that stay fully editable during training."
-      />
-      <PrimaryButton
-        icon={<Plus color={onPrimary} size={20} />}
-        label="Create workout plan"
-        onPress={() => {
-          setMessage('');
-          setBuilding(true);
-        }}
+        subtitle={`${plans.length} ${plans.length === 1 ? 'plan' : 'plans'} · all available offline`}
+        trailing={
+          <Pressable
+            accessibilityLabel="Create workout plan"
+            accessibilityRole="button"
+            className="h-11 w-11 items-center justify-center rounded-xl bg-primary active:opacity-80"
+            onPress={() => {
+              setMessage('');
+              setBuilding(true);
+            }}
+          >
+            <Plus color={onPrimary} size={20} strokeWidth={2.4} />
+          </Pressable>
+        }
       />
       {message ? (
-        <View className="mt-3">
+        <View className="mb-4">
           <FeedbackBanner message={message} />
         </View>
       ) : null}
 
-      <View className="mt-7">
-        {plans.map((plan) => {
-          const exerciseCount = planExercises.filter(
-            (entry) => entry.planId === plan.id,
-          ).length;
-          const supporting = `${exerciseCount} ${exerciseCount === 1 ? 'exercise' : 'exercises'}`;
-          return (
-            <Row
-              key={plan.id}
-              onPress={() => {
-                setMessage('');
-                setSelectedPlan(plan);
-              }}
-              subtitle={
-                plan.description
-                  ? `${supporting} · ${plan.description}`
-                  : supporting
-              }
-              title={plan.name}
-            />
-          );
-        })}
-        {!plans.length ? (
-          <EmptyState
-            message="Name a session, choose exercises, then set the targets you want ready at workout time."
-            title="Build your first plan"
-          />
-        ) : null}
-      </View>
+      {plans.length ? (
+        groupPlansByDifficulty(plans).map((group) => (
+          <View key={group.label} className="mb-5 gap-1">
+            <SectionLabel label={group.label} />
+            <GroupedList>
+              {group.plans.map((plan) => {
+                const exerciseCount = planExercises.filter(
+                  (entry) => entry.planId === plan.id,
+                ).length;
+                const minutes = estimatePlanMinutes(
+                  countPlanSets(planExercises, plan.id),
+                  restTimerSeconds,
+                );
+                return (
+                  <Row
+                    key={plan.id}
+                    border={false}
+                    onPress={() => {
+                      setMessage('');
+                      setSelectedPlan(plan);
+                    }}
+                    subtitle={`${exerciseCount} ${
+                      exerciseCount === 1 ? 'exercise' : 'exercises'
+                    }${minutes ? ` · ${minutes} min` : ''}`}
+                    title={plan.name}
+                    trailing={
+                      activeSessionPlanId === plan.id ? (
+                        // Never colour alone: the badge spells the state out.
+                        <View className="h-[22px] justify-center rounded-md bg-primary-soft px-2">
+                          <Text className="text-[10px] font-extrabold tracking-wide text-primary">
+                            ACTIVE
+                          </Text>
+                        </View>
+                      ) : undefined
+                    }
+                  />
+                );
+              })}
+            </GroupedList>
+          </View>
+        ))
+      ) : (
+        <EmptyState
+          message="Name a session, choose exercises, then set the targets you want ready at workout time."
+          title="Build your first plan"
+        />
+      )}
     </Page>
   );
 }
@@ -159,5 +198,9 @@ export const PlansScreen = withObservables([], () => ({
   exercises: database
     .get<Exercise>('exercises')
     .query(Q.sortBy('name', Q.asc))
+    .observe(),
+  activeSessions: database
+    .get<WorkoutSession>('workout_sessions')
+    .query(Q.where('end_time', null), Q.sortBy('start_time', Q.desc), Q.take(1))
     .observe(),
 }))(PlansBase as any) as React.ComponentType;

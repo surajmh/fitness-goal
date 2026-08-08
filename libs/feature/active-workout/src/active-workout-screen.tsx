@@ -7,11 +7,11 @@ import {
   ChevronDown,
   ChevronUp,
   CirclePlus,
+  Download,
   EmptyState,
   ExerciseArtwork,
   ExerciseMotionPreview,
   FeedbackBanner,
-  Minus,
   Page,
   Plus,
   Pressable,
@@ -56,14 +56,22 @@ function ActiveWorkoutBase({
   const { setActiveSessionId, weightUnit, restTimerSeconds } = useAppState();
   const primary = useCSSVariable('--primary') as string;
   const onPrimary = useCSSVariable('--on-primary') as string;
-  const onRecovery = useCSSVariable('--on-recovery') as string;
   const muted = useCSSVariable('--muted') as string;
-  const { secondsLeft, isRunning, start, cancel } = useRestTimer();
+  const { secondsLeft, totalSeconds, isRunning, start, cancel } =
+    useRestTimer();
   const [showPicker, setShowPicker] = useState(false);
   const [notes, setNotes] = useState(session.notes ?? '');
   const [message, setMessage] = useState('');
-  const { orderedGroups, activeExerciseId, completed, volume, lastCompleted } =
-    useActiveWorkoutScreen(sets);
+  const {
+    orderedGroups,
+    activeExerciseId,
+    activeSetId,
+    elapsed,
+    personalRecordIds,
+    completed,
+    volume,
+    lastCompleted,
+  } = useActiveWorkoutScreen(sets, historySets, session.startTime);
 
   if (showPicker) {
     return (
@@ -85,14 +93,21 @@ function ActiveWorkoutBase({
 
   return (
     <Page>
-      <View className="mb-5 flex-row items-start justify-between">
-        <View>
-          <Text className="text-3xl font-bold tracking-tight text-ink">
+      <View className="mb-5 flex-row items-center gap-3">
+        <View className="min-w-0 flex-1">
+          <Text className="text-2xl font-bold tracking-tight text-ink">
             Active workout
           </Text>
-          <Text className="mt-1 text-base text-muted">
-            {completed} of {sets.length} sets complete
-          </Text>
+          <View className="mt-0.5 flex-row items-center gap-1.5">
+            <Text className="text-xs font-semibold tabular-nums text-muted">
+              {elapsed} elapsed · {completed} of {sets.length} sets
+            </Text>
+            <Text className="text-xs font-semibold text-muted">·</Text>
+            <Download color={muted} size={12} />
+            <Text className="text-xs font-semibold text-muted">
+              Saved on device
+            </Text>
+          </View>
         </View>
         <TextButton
           label="Finish"
@@ -122,30 +137,40 @@ function ActiveWorkoutBase({
       ) : null}
 
       {isRunning ? (
-        <View className="mb-5 flex-row items-center gap-4 rounded-xl bg-recovery p-4">
-          <TimerReset color={onRecovery} size={24} />
+        <View className="mb-5 min-h-12 flex-row items-center gap-3 rounded-full bg-primary-soft py-1.5 pl-4 pr-1.5">
+          <TimerReset color={primary} size={18} />
           <View className="flex-1">
-            <Text className="text-sm font-semibold text-on-recovery">
-              REST TIMER
-            </Text>
-            <Text className="text-2xl font-bold tabular-nums text-on-recovery">
-              {Math.floor(secondsLeft / 60)}:
-              {(secondsLeft % 60).toString().padStart(2, '0')}
-            </Text>
+            <View className="flex-row items-baseline gap-2">
+              <Text className="text-xl font-bold tabular-nums text-primary">
+                {Math.floor(secondsLeft / 60)}:
+                {(secondsLeft % 60).toString().padStart(2, '0')}
+              </Text>
+              <Text className="text-xs font-semibold text-muted">
+                rest remaining
+              </Text>
+            </View>
+            <View className="mt-1 h-1 overflow-hidden rounded-full bg-outline">
+              <View
+                className="h-full rounded-full bg-primary"
+                style={{
+                  width: `${totalSeconds ? (secondsLeft / totalSeconds) * 100 : 0}%`,
+                }}
+              />
+            </View>
           </View>
           <Pressable
             accessibilityLabel="Add 30 seconds to rest timer"
-            className="min-h-12 justify-center rounded-xl bg-canvas px-3"
+            className="min-h-9 justify-center rounded-full px-3"
             onPress={() => start(secondsLeft + 30)}
           >
-            <Text className="font-bold text-primary">+30s</Text>
+            <Text className="text-sm font-bold text-primary">+30s</Text>
           </Pressable>
           <Pressable
-            accessibilityLabel="Cancel rest timer"
-            className="h-12 w-12 items-center justify-center"
+            accessibilityLabel="Skip rest timer"
+            className="min-h-9 justify-center rounded-full bg-primary px-4"
             onPress={cancel}
           >
-            <Minus color={onRecovery} size={22} />
+            <Text className="text-sm font-bold text-on-primary">Skip</Text>
           </Pressable>
         </View>
       ) : null}
@@ -223,27 +248,31 @@ function ActiveWorkoutBase({
             {exercise && exerciseId === activeExerciseId ? (
               <ExerciseMotionPreview exercise={exercise} />
             ) : null}
-            <View className="rounded-xl border border-outline bg-surface px-3">
-              <View className="flex-row items-center gap-2 border-b border-outline py-2">
-                <Text className="w-8 text-center text-xs font-semibold text-muted">
-                  SET
+            <View>
+              <View className="flex-row items-center gap-2 px-2 pb-1">
+                <Text className="w-8 text-center text-xs font-bold uppercase text-muted">
+                  Set
                 </Text>
-                <Text className="flex-1 text-center text-xs font-semibold text-muted">
-                  {weightUnit.toUpperCase()}
+                <Text className="flex-1 px-3 text-xs font-bold uppercase text-muted">
+                  Weight · {weightUnit}
                 </Text>
-                <Text className="flex-1 text-center text-xs font-semibold text-muted">
-                  REPS
+                <Text className="flex-1 px-3 text-xs font-bold uppercase text-muted">
+                  Reps
                 </Text>
-                <Text className="w-14 text-center text-xs font-semibold text-muted">
+                <Text className="w-14 text-center text-xs font-bold uppercase text-muted">
                   RPE
                 </Text>
-                <View className="w-12" />
+                <Text className="w-12 text-center text-xs font-bold uppercase text-muted">
+                  Done
+                </Text>
                 <View className="w-12" />
               </View>
               {exerciseSets.map((item) => (
                 <SetEditor
                   key={item.id}
                   item={item}
+                  isActive={item.id === activeSetId}
+                  isPersonalRecord={personalRecordIds.has(item.id)}
                   onCompleted={() => start(restTimerSeconds)}
                   onDuplicate={() => addSet(session.id, exerciseId, item)}
                   onRemove={() => removeSet(item)}

@@ -17,6 +17,7 @@ setNotificationHandler({
 
 export function useRestTimer() {
   const [secondsLeft, setSecondsLeft] = useState(0);
+  const [totalSeconds, setTotalSeconds] = useState(0);
   const endAt = useRef<number | null>(null);
   const notificationId = useRef<string | null>(null);
 
@@ -37,6 +38,7 @@ export function useRestTimer() {
   const start = useCallback(async (seconds: number) => {
     endAt.current = Date.now() + seconds * 1000;
     setSecondsLeft(seconds);
+    setTotalSeconds(seconds);
     const permission = await requestPermissionsAsync();
     if (permission.granted) {
       notificationId.current = await scheduleNotificationAsync({
@@ -62,5 +64,11 @@ export function useRestTimer() {
     }
   }, []);
 
-  return { secondsLeft, isRunning: secondsLeft > 0, start, cancel };
+  return {
+    secondsLeft,
+    totalSeconds,
+    isRunning: secondsLeft > 0,
+    start,
+    cancel,
+  };
 }

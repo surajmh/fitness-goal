@@ -9,8 +9,11 @@ describe('ScreenTitle', () => {
     const element = ScreenTitle({ title: 'Progress' }) as React.ReactElement<{
       children: React.ReactNode;
     }>;
-    const title = React.Children.toArray(
+    const column = React.Children.toArray(
       element.props.children,
+    )[0] as React.ReactElement<{ children: React.ReactNode }>;
+    const title = React.Children.toArray(
+      column.props.children,
     )[0] as React.ReactElement<{ accessibilityRole: string }>;
     expect(title.props.accessibilityRole).toBe('header');
   });

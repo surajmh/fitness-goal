@@ -9,6 +9,7 @@ export function SearchField({
   placeholder = DEFAULT_SEARCH_PLACEHOLDER,
 }: SearchFieldProps) {
   const muted = useCSSVariable('--muted') as string;
+  const placeholderInk = useCSSVariable('--placeholder-ink') as string;
   return (
     <View className="min-h-12 flex-row items-center gap-3 rounded-xl bg-surface px-4">
       <Search color={muted} size={20} aria-hidden />
@@ -17,7 +18,7 @@ export function SearchField({
         className="min-h-12 flex-1 text-base text-ink"
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={muted}
+        placeholderTextColor={placeholderInk}
         returnKeyType="search"
         value={value}
       />

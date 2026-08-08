@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- WatermelonDB's HOC erases injected observable props. */
 import React from 'react';
-import { Switch } from 'react-native';
+import { Alert } from 'react-native';
 import { Q } from '@nozbe/watermelondb';
 import withObservables from '@nozbe/with-observables';
 import {
+  ChevronRight,
   FeedbackBanner,
+  GroupedList,
   HealthSyncCard,
+  Info,
   Minus,
   Page,
   Plus,
@@ -15,10 +18,12 @@ import {
   ScreenTitle,
   ScrollView,
   SearchField,
+  SectionLabel,
   Text,
   TextInput,
   Trash2,
   useCSSVariable,
+  useReduceMotion,
   USER_ID,
   View,
 } from '@fitnessgoal/shared/ui';
@@ -37,7 +42,7 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
   const { weightUnit, setWeightUnit, restTimerSeconds, setRestTimerSeconds } =
     useAppState();
   const muted = useCSSVariable('--muted') as string;
-  const primary = useCSSVariable('--primary') as string;
+  const reduceMotion = useReduceMotion();
   const {
     selectedExerciseId,
     setSelectedExerciseId,
@@ -60,70 +65,17 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
   } = useSettingsScreen({ exercises, overloadSettings });
 
   const repPresets = [8, 10, 12, 15];
-  const weightPresets = weightUnit === 'kg' ? [1, 2.5, 5, 10] : [2.5, 5, 10, 15];
+  const weightPresets =
+    weightUnit === 'kg' ? [1, 2.5, 5, 10] : [2.5, 5, 10, 15];
   const isSelectedConfigured = overloadMap.has(selectedExerciseId);
 
   return (
     <Page>
-      <ScreenTitle
-        title="Settings"
-        subtitle="Preferences stay with your local profile."
-      />
-
-      {/* Unit & Rest Timer Preferences */}
-      <View className="rounded-xl bg-surface px-4">
-        <Row
-          title="Use kilograms"
-          subtitle={`Currently showing ${weightUnit.toUpperCase()}`}
-          trailing={
-            <Switch
-              accessibilityLabel="Use kilograms"
-              onValueChange={(enabled) => setWeightUnit(enabled ? 'kg' : 'lb')}
-              thumbColor="#ffffff"
-              trackColor={{ false: muted, true: primary }}
-              value={weightUnit === 'kg'}
-            />
-          }
-        />
-        <Row
-          border={false}
-          subtitle="Starts after a completed set"
-          title="Default rest timer"
-          trailing={
-            <View className="flex-row items-center gap-1">
-              <Pressable
-                accessibilityLabel="Decrease default rest timer by 15 seconds"
-                className="h-10 w-10 items-center justify-center rounded-lg bg-background"
-                onPress={() =>
-                  setRestTimerSeconds(Math.max(15, restTimerSeconds - 15))
-                }
-              >
-                <Minus color={muted} size={19} />
-              </Pressable>
-              <Text className="min-w-14 text-center font-semibold text-primary">
-                {Math.floor(restTimerSeconds / 60)}:
-                {(restTimerSeconds % 60).toString().padStart(2, '0')}
-              </Text>
-              <Pressable
-                accessibilityLabel="Increase default rest timer by 15 seconds"
-                className="h-10 w-10 items-center justify-center rounded-lg bg-background"
-                onPress={() =>
-                  setRestTimerSeconds(Math.min(600, restTimerSeconds + 15))
-                }
-              >
-                <Plus color={muted} size={19} />
-              </Pressable>
-            </View>
-          }
-        />
-      </View>
+      <ScreenTitle title="Settings" />
 
       {/* Health Sync Section */}
-      <View className="mt-7">
-        <Text className="mb-1 text-xl font-bold text-ink">Health sync</Text>
-        <Text className="mb-4 text-base leading-6 text-muted">
-          Read data you choose to share and keep it locally on this device.
-        </Text>
+      <View className="gap-1">
+        <SectionLabel label="Health sync" />
         <HealthSyncCard
           error={healthSync.error}
           loading={healthSync.loading}
@@ -135,14 +87,99 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
         />
       </View>
 
+      {/* Unit & Rest Timer Preferences */}
+      <View className="mt-6 gap-1">
+        <SectionLabel label="Training" />
+        <GroupedList surface>
+          <Row
+            border={false}
+            onPress={() =>
+              Alert.alert('Units', undefined, [
+                {
+                  text: 'Kilograms',
+                  onPress: () => void setWeightUnit('kg'),
+                },
+                { text: 'Pounds', onPress: () => void setWeightUnit('lb') },
+                { text: 'Cancel', style: 'cancel' },
+              ])
+            }
+            title="Units"
+            trailing={
+              <View className="flex-row items-center gap-1.5">
+                <Text className="text-[15px] font-semibold text-muted">
+                  {weightUnit === 'kg' ? 'Kilograms' : 'Pounds'}
+                </Text>
+                <ChevronRight color={muted} size={18} />
+              </View>
+            }
+          />
+          <Row
+            border={false}
+            title="Default rest timer"
+            trailing={
+              <View className="flex-row items-center gap-1">
+                <Pressable
+                  accessibilityLabel="Decrease default rest timer by 15 seconds"
+                  className="h-10 w-10 items-center justify-center rounded-lg bg-canvas"
+                  onPress={() =>
+                    setRestTimerSeconds(Math.max(15, restTimerSeconds - 15))
+                  }
+                >
+                  <Minus color={muted} size={19} />
+                </Pressable>
+                <Text className="min-w-14 text-center text-[15px] font-semibold tabular-nums text-ink">
+                  {Math.floor(restTimerSeconds / 60)}:
+                  {(restTimerSeconds % 60).toString().padStart(2, '0')}
+                </Text>
+                <Pressable
+                  accessibilityLabel="Increase default rest timer by 15 seconds"
+                  className="h-10 w-10 items-center justify-center rounded-lg bg-canvas"
+                  onPress={() =>
+                    setRestTimerSeconds(Math.min(600, restTimerSeconds + 15))
+                  }
+                >
+                  <Plus color={muted} size={19} />
+                </Pressable>
+              </View>
+            }
+          />
+        </GroupedList>
+      </View>
+
+      {/* Appearance & access */}
+      <View className="mt-6 gap-1">
+        <SectionLabel label="Appearance & access" />
+        <GroupedList surface>
+          <Row
+            border={false}
+            subtitle="Follows your device appearance"
+            title="Theme"
+            trailing={
+              <Text className="text-[15px] font-semibold text-muted">
+                System
+              </Text>
+            }
+          />
+          <Row
+            border={false}
+            subtitle="Follows your device accessibility setting"
+            title="Reduce motion"
+            trailing={
+              <Text className="text-[15px] font-semibold text-muted">
+                {reduceMotion ? 'On' : 'Off'}
+              </Text>
+            }
+          />
+        </GroupedList>
+      </View>
+
       {/* Progressive Overload Section */}
-      <View className="mt-7 gap-4">
-        <View>
-          <Text className="mb-1 text-xl font-bold text-ink">
-            Progressive overload
-          </Text>
-          <Text className="text-base leading-6 text-muted">
-            Set target reps to automatically trigger weight increases during workout logging.
+      <View className="mt-6 gap-4">
+        <View className="gap-1">
+          <SectionLabel label="Progressive overload" />
+          <Text className="text-[13px] font-medium leading-5 text-muted">
+            Set target reps to automatically trigger weight increases during
+            workout logging.
           </Text>
         </View>
 
@@ -176,7 +213,7 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                 >
                   <Text
                     className={`text-sm font-medium ${
-                      isSelected ? 'text-surface' : 'text-ink'
+                      isSelected ? 'text-on-primary' : 'text-ink'
                     }`}
                   >
                     {exercise.name}
@@ -207,13 +244,13 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                 </Text>
               </View>
               {isSelectedConfigured ? (
-                <View className="rounded-full bg-primary/15 px-3 py-1">
+                <View className="rounded-full bg-primary-soft px-3 py-1">
                   <Text className="text-xs font-semibold text-primary">
                     Custom Active
                   </Text>
                 </View>
               ) : (
-                <View className="rounded-full bg-muted/15 px-3 py-1">
+                <View className="rounded-full bg-surface px-3 py-1">
                   <Text className="text-xs font-semibold text-muted">
                     Default (12 reps / +5)
                   </Text>
@@ -229,13 +266,13 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
               <View className="flex-row items-center gap-2">
                 <Pressable
                   accessibilityLabel="Decrease trigger reps"
-                  className="h-12 w-12 items-center justify-center rounded-xl bg-background border border-outline"
+                  className="h-12 w-12 items-center justify-center rounded-xl bg-canvas border border-outline"
                   onPress={() => handleStepReps(-1)}
                 >
                   <Minus color={muted} size={18} />
                 </Pressable>
                 <TextInput
-                  className="min-h-12 flex-1 rounded-xl bg-background px-4 text-center text-lg font-semibold text-ink border border-outline"
+                  className="min-h-12 flex-1 rounded-xl bg-canvas px-4 text-center text-lg font-semibold text-ink border border-outline"
                   keyboardType="number-pad"
                   onChangeText={setTriggerReps}
                   placeholderTextColor={muted}
@@ -243,7 +280,7 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                 />
                 <Pressable
                   accessibilityLabel="Increase trigger reps"
-                  className="h-12 w-12 items-center justify-center rounded-xl bg-background border border-outline"
+                  className="h-12 w-12 items-center justify-center rounded-xl bg-canvas border border-outline"
                   onPress={() => handleStepReps(1)}
                 >
                   <Plus color={muted} size={18} />
@@ -257,8 +294,8 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                     accessibilityLabel={`Set ${reps} reps`}
                     className={`flex-1 rounded-lg py-1.5 items-center justify-center border ${
                       triggerReps === String(reps)
-                        ? 'bg-primary/10 border-primary'
-                        : 'bg-background border-outline'
+                        ? 'border-primary bg-primary-soft'
+                        : 'bg-canvas border-outline'
                     }`}
                     onPress={() => setTriggerReps(String(reps))}
                   >
@@ -284,13 +321,15 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
               <View className="flex-row items-center gap-2">
                 <Pressable
                   accessibilityLabel="Decrease weight increase"
-                  className="h-12 w-12 items-center justify-center rounded-xl bg-background border border-outline"
-                  onPress={() => handleStepIncrease(weightUnit === 'kg' ? -0.5 : -1)}
+                  className="h-12 w-12 items-center justify-center rounded-xl bg-canvas border border-outline"
+                  onPress={() =>
+                    handleStepIncrease(weightUnit === 'kg' ? -0.5 : -1)
+                  }
                 >
                   <Minus color={muted} size={18} />
                 </Pressable>
                 <TextInput
-                  className="min-h-12 flex-1 rounded-xl bg-background px-4 text-center text-lg font-semibold text-ink border border-outline"
+                  className="min-h-12 flex-1 rounded-xl bg-canvas px-4 text-center text-lg font-semibold text-ink border border-outline"
                   keyboardType="decimal-pad"
                   onChangeText={setIncreaseBy}
                   placeholderTextColor={muted}
@@ -298,8 +337,10 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                 />
                 <Pressable
                   accessibilityLabel="Increase weight increase"
-                  className="h-12 w-12 items-center justify-center rounded-xl bg-background border border-outline"
-                  onPress={() => handleStepIncrease(weightUnit === 'kg' ? 0.5 : 1)}
+                  className="h-12 w-12 items-center justify-center rounded-xl bg-canvas border border-outline"
+                  onPress={() =>
+                    handleStepIncrease(weightUnit === 'kg' ? 0.5 : 1)
+                  }
                 >
                   <Plus color={muted} size={18} />
                 </Pressable>
@@ -312,8 +353,8 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
                     accessibilityLabel={`Set ${val} ${weightUnit} increase`}
                     className={`flex-1 rounded-lg py-1.5 items-center justify-center border ${
                       increaseBy === String(val)
-                        ? 'bg-primary/10 border-primary'
-                        : 'bg-background border-outline'
+                        ? 'border-primary bg-primary-soft'
+                        : 'bg-canvas border-outline'
                     }`}
                     onPress={() => setIncreaseBy(String(val))}
                   >
@@ -332,15 +373,22 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
             </View>
 
             {/* Live Contextual Preview */}
-            <View className="rounded-xl bg-background p-3.5 border border-outline">
+            <View className="rounded-xl bg-canvas p-3.5 border border-outline">
               <Text className="text-sm leading-5 text-ink">
-                ⚡ <Text className="font-semibold">Rule Preview:</Text> Completing{' '}
-                <Text className="font-bold text-primary">{triggerReps || '12'} reps</Text>{' '}
-                on <Text className="font-bold text-ink">{selectedExercise.name}</Text>{' '}
+                ⚡ <Text className="font-semibold">Rule Preview:</Text>{' '}
+                Completing{' '}
+                <Text className="font-bold text-primary">
+                  {triggerReps || '12'} reps
+                </Text>{' '}
+                on{' '}
+                <Text className="font-bold text-ink">
+                  {selectedExercise.name}
+                </Text>{' '}
                 will auto-increase next set weight by{' '}
                 <Text className="font-bold text-primary">
                   +{increaseBy || '5'} {weightUnit}
-                </Text>.
+                </Text>
+                .
               </Text>
             </View>
 
@@ -361,45 +409,52 @@ function SettingsBase({ exercises, overloadSettings }: SettingsScreenProps) {
             <Text className="text-base font-bold text-ink">
               Configured rules ({configuredRules.length})
             </Text>
-            {configuredRules.map(({ setting, exercise, triggerReps: reps, increaseBy: inc }) => (
-              <View
-                key={setting.id}
-                className="flex-row items-center justify-between rounded-xl bg-surface p-3.5 border border-outline"
-              >
-                <Pressable
-                  accessibilityLabel={`Edit rule for ${exercise.name}`}
-                  className="flex-1 pr-3"
-                  onPress={() => setSelectedExerciseId(exercise.id)}
+            {configuredRules.map(
+              ({ setting, exercise, triggerReps: reps, increaseBy: inc }) => (
+                <View
+                  key={setting.id}
+                  className="flex-row items-center justify-between rounded-xl bg-surface p-3.5 border border-outline"
                 >
-                  <Text className="text-base font-semibold text-ink">
-                    {exercise.name}
-                  </Text>
-                  <Text className="mt-0.5 text-sm text-muted">
-                    Trigger:{' '}
-                    <Text className="font-semibold text-primary">{reps} reps</Text>{' '}
-                    → Increase:{' '}
-                    <Text className="font-semibold text-primary">
-                      +{inc} {weightUnit}
+                  <Pressable
+                    accessibilityLabel={`Edit rule for ${exercise.name}`}
+                    className="flex-1 pr-3"
+                    onPress={() => setSelectedExerciseId(exercise.id)}
+                  >
+                    <Text className="text-base font-semibold text-ink">
+                      {exercise.name}
                     </Text>
-                  </Text>
-                </Pressable>
-                <Pressable
-                  accessibilityLabel={`Reset rule for ${exercise.name}`}
-                  className="h-10 w-10 items-center justify-center rounded-lg bg-background border border-outline"
-                  onPress={() => deleteOverload(exercise.id)}
-                >
-                  <Trash2 color={muted} size={18} />
-                </Pressable>
-              </View>
-            ))}
+                    <Text className="mt-0.5 text-sm text-muted">
+                      Trigger:{' '}
+                      <Text className="font-semibold text-primary">
+                        {reps} reps
+                      </Text>{' '}
+                      → Increase:{' '}
+                      <Text className="font-semibold text-primary">
+                        +{inc} {weightUnit}
+                      </Text>
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel={`Reset rule for ${exercise.name}`}
+                    className="h-10 w-10 items-center justify-center rounded-lg bg-canvas border border-outline"
+                    onPress={() => deleteOverload(exercise.id)}
+                  >
+                    <Trash2 color={muted} size={18} />
+                  </Pressable>
+                </View>
+              ),
+            )}
           </View>
         ) : null}
       </View>
 
-      <Text className="mt-6 text-sm leading-5 text-muted">
-        Health records remain on this device and are only read while Fitness
-        Goal is open.
-      </Text>
+      <View className="mt-6 flex-row items-center gap-2 rounded-xl bg-surface px-3 py-2.5">
+        <Info color={muted} size={14} />
+        <Text className="min-w-0 flex-1 text-xs font-semibold leading-4 text-muted">
+          All training data lives on this device. Health records are only read
+          while Fitness Goal is open, and sync is optional.
+        </Text>
+      </View>
     </Page>
   );
 }

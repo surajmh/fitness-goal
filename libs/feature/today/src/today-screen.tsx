@@ -3,92 +3,112 @@ import React from 'react';
 import { Q } from '@nozbe/watermelondb';
 import withObservables from '@nozbe/with-observables';
 import {
-  BrandMark,
   Copy,
-  Dumbbell,
+  Download,
   EmptyState,
   FeedbackBanner,
+  GroupedList,
   Page,
   Play,
   Pressable,
   PrimaryButton,
-  ProgressIcon,
-  RotateCcw,
   Row,
   ScreenTitle,
+  SectionLabel,
+  StatTile,
   Text,
-  TrendingUp,
   useCSSVariable,
   View,
-  VolumeBar,
 } from '@fitnessgoal/shared/ui';
 import {
   database,
+  estimatePlanMinutes,
+  PlanExercise,
   WorkoutPlan,
   WorkoutSession,
   WorkoutSet,
 } from '@fitnessgoal/data-access/workout';
+import {
+  countPlanWork,
+  formatRelativeDay,
+  planInitials,
+} from './today-screen.helpers';
 import type { TodayScreenProps } from './today-screen.types';
 import { useTodayScreen } from './use-today-screen';
-import { PerformanceRings } from './performance-rings';
+
+function OnDevicePill() {
+  const muted = useCSSVariable('--muted') as string;
+  return (
+    <View className="h-7 flex-row items-center gap-1.5 rounded-full border border-outline bg-surface px-2.5">
+      <Download color={muted} size={13} />
+      <Text className="text-xs font-semibold text-muted">On device</Text>
+    </View>
+  );
+}
 
 function TodayBase({
   plans,
+  planExercises,
   sessions,
   sets,
   activeSessions,
 }: TodayScreenProps) {
   const primary = useCSSVariable('--primary') as string;
   const onPrimary = useCSSVariable('--on-primary') as string;
-  const coral = useCSSVariable('--coral') as string;
-  const lime = useCSSVariable('--lime') as string;
-  const cyan = useCSSVariable('--cyan') as string;
   const {
     activeSession,
     begin,
-    completedSetCount,
     lastSession,
-    maxBar,
     message,
     openSession,
     repeat,
-    volume,
+    sessionGoal,
+    streakWeeks,
+    upNext,
+    weekSessions,
+    weekVolume,
+    restTimerSeconds,
     weightUnit,
-    weekBars,
     working,
-  } = useTodayScreen({ plans, sessions, sets, activeSessions });
+  } = useTodayScreen({ plans, planExercises, sessions, sets, activeSessions });
+
+  const planSubtitle = (planId: string) => {
+    const { exerciseCount, setCount } = countPlanWork(planExercises, planId);
+    const minutes = estimatePlanMinutes(setCount, restTimerSeconds);
+    const exercises = `${exerciseCount} ${exerciseCount === 1 ? 'exercise' : 'exercises'}`;
+    return minutes ? `${exercises} · ${minutes} min` : exercises;
+  };
 
   return (
     <Page>
-      <View className="mb-6 flex-row items-center">
-        <BrandMark size={48} />
-        <View className="ml-3 flex-1">
-          <Text className="text-3xl font-bold tracking-tight text-ink">
-            Fitness<Text className="text-primary">Goal</Text>
-          </Text>
-        </View>
-      </View>
       <ScreenTitle
-        title="Your training"
-        subtitle="A clear read on momentum, volume, and what comes next."
+        title="Today"
+        subtitle={new Date().toLocaleDateString('en-AU', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+        })}
+        trailing={<OnDevicePill />}
       />
+
       {message ? (
         <View className="mb-4">
           <FeedbackBanner message={message} tone="error" />
         </View>
       ) : null}
+
       {activeSession ? (
         <Pressable
           accessibilityRole="button"
-          className="mb-4 min-h-20 flex-row items-center gap-4 rounded-xl bg-primary p-4"
+          className="mb-4 min-h-20 flex-row items-center gap-4 rounded-2xl bg-primary p-4"
           onPress={() => openSession(activeSession.id)}
         >
           <View className="h-12 w-12 items-center justify-center rounded-xl bg-canvas">
-            <Play color={primary} fill={primary} size={20} />
+            <Play color={primary} size={20} />
           </View>
           <View className="flex-1">
-            <Text className="text-sm font-semibold text-on-primary">
-              WORKOUT IN PROGRESS
+            <Text className="text-[11px] font-bold uppercase tracking-wide text-on-primary">
+              Workout in progress
             </Text>
             <Text className="mt-0.5 text-lg font-bold text-on-primary">
               Resume saved session
@@ -97,128 +117,109 @@ function TodayBase({
         </Pressable>
       ) : null}
 
-      <View className="mb-4 flex-row items-center rounded-xl border border-outline bg-surface p-4">
-        <View className="flex-1 items-center justify-center pr-1">
-          <PerformanceRings
-            completedSetCount={completedSetCount}
-            sessionCount={sessions.length}
-            volume={volume}
+      <View className="flex-row gap-2">
+        <StatTile
+          caption={`${weightUnit} this week`}
+          label="Volume"
+          role="cyan"
+          value={Math.round(weekVolume).toLocaleString()}
+        />
+        <StatTile
+          caption="on plan"
+          label="Sessions"
+          role="lime"
+          value={`${weekSessions} / ${sessionGoal}`}
+        />
+        <StatTile
+          caption={streakWeeks === 1 ? 'week' : 'weeks'}
+          label="Streak"
+          role="coral"
+          value={String(streakWeeks)}
+        />
+      </View>
+
+      {upNext ? (
+        <View className="mt-4 rounded-2xl border border-outline bg-surface-raised p-4">
+          <View className="flex-row items-center justify-between">
+            <SectionLabel label="Up next" />
+            <Text className="text-xs font-semibold tabular-nums text-muted">
+              ≈ {estimatePlanMinutes(upNext.setCount, restTimerSeconds)} min
+            </Text>
+          </View>
+          <Text className="mt-2 text-[22px] font-bold tracking-tight text-ink">
+            {upNext.plan.name}
+          </Text>
+          <Text className="mt-1 text-[13px] font-medium text-muted">
+            {upNext.exerciseCount}{' '}
+            {upNext.exerciseCount === 1 ? 'exercise' : 'exercises'} ·{' '}
+            {upNext.setCount} sets
+            {upNext.lastDoneAt
+              ? ` · last done ${formatRelativeDay(upNext.lastDoneAt)}`
+              : ' · never done'}
+          </Text>
+          <View className="mt-3.5">
+            <PrimaryButton
+              disabled={Boolean(activeSession)}
+              icon={<Play color={onPrimary} size={18} />}
+              label="Start workout"
+              loading={working}
+              onPress={() => begin(upNext.plan.id)}
+            />
+          </View>
+        </View>
+      ) : null}
+
+      <View className="mt-3 flex-row gap-2">
+        <View className="flex-1">
+          <PrimaryButton
+            disabled={Boolean(activeSession)}
+            label="Empty workout"
+            loading={working && !upNext}
+            onPress={() => begin()}
+            variant="secondary"
           />
         </View>
-        <View className="flex-1 items-center gap-3 pl-1">
-          {[
-            {
-              headline: `${completedSetCount} sets`,
-              supporting: '20-set goal',
-              color: coral,
-              Icon: ProgressIcon,
-            },
-            {
-              headline: `${sessions.length} sessions`,
-              supporting: '4-session goal',
-              color: lime,
-              Icon: RotateCcw,
-            },
-            {
-              headline: `${Math.round(volume).toLocaleString()} ${weightUnit}`,
-              supporting: `20,000 ${weightUnit} goal`,
-              color: cyan,
-              Icon: Dumbbell,
-            },
-          ].map((metric) => (
-            <View
-              key={metric.headline}
-              className="w-full max-w-36 flex-row items-center justify-center gap-2 px-1"
-            >
-              <View className="w-6 items-center">
-                <metric.Icon color={metric.color} size={20} strokeWidth={2} />
-              </View>
-              <View className="min-w-0 flex-1">
-                <Text
-                  className="text-base font-bold uppercase"
-                  numberOfLines={1}
-                  style={{ color: metric.color }}
-                >
-                  {metric.headline}
-                </Text>
-                <Text className="text-xs text-muted" numberOfLines={1}>
-                  {metric.supporting}
-                </Text>
-              </View>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      <View
-        accessibilityLabel={`Sessions over the last seven days: ${weekBars.join(', ')}`}
-        className="mb-5 rounded-xl border border-outline bg-surface p-4"
-      >
-        <View className="mb-3 flex-row items-center justify-between">
-          <Text className="text-lg font-bold text-ink">Weekly rhythm</Text>
-          <TrendingUp color={cyan} size={20} />
-        </View>
-        <View className="h-24 flex-row items-end justify-between gap-2">
-          {weekBars.map((value, index) => (
-            <View key={index} className="flex-1 items-center gap-1">
-              <VolumeBar
-                active={value > 0}
-                height={value > 0 ? Math.max(16, (value / maxBar) * 70) : 10}
-              />
-              <Text className="text-xs text-muted">
-                {
-                  ['S', 'M', 'T', 'W', 'T', 'F', 'S'][
-                    new Date(Date.now() - (6 - index) * 86400000).getDay()
-                  ]
-                }
-              </Text>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      <View className="mb-7 gap-3">
-        <PrimaryButton
-          icon={<Play color={onPrimary} fill={onPrimary} size={18} />}
-          label="Start an empty workout"
-          onPress={() => begin()}
-          loading={working}
-          disabled={Boolean(activeSession)}
-        />
         {lastSession ? (
-          <Pressable
-            accessibilityRole="button"
-            className="min-h-12 flex-row items-center justify-center gap-2 rounded-xl bg-surface px-5 active:opacity-80"
-            disabled={Boolean(activeSession)}
-            onPress={() => repeat(lastSession.id)}
-          >
-            <Copy color={primary} size={18} />
-            <Text className="text-base font-semibold text-primary">
-              Repeat last workout
-            </Text>
-          </Pressable>
+          <View className="flex-1">
+            <PrimaryButton
+              disabled={Boolean(activeSession)}
+              icon={<Copy color={primary} size={18} />}
+              label="Repeat last"
+              onPress={() => repeat(lastSession.id)}
+              variant="secondary"
+            />
+          </View>
         ) : null}
       </View>
 
-      <Text className="mb-2 text-xl font-bold text-ink">Start from a plan</Text>
-      {plans.length ? (
-        <View>
-          {plans.map((plan) => (
-            <Row
-              key={plan.id}
-              onPress={() => begin(plan.id)}
-              subtitle={plan.description || 'Preloaded sets, ready to adjust'}
-              title={plan.name}
-              trailing={<Play color={primary} size={20} />}
-            />
-          ))}
-        </View>
-      ) : (
-        <EmptyState
-          message="Create a plan once, then start it here with every target set already in place."
-          title="No saved plans yet"
-        />
-      )}
+      <View className="mt-6 gap-2">
+        <SectionLabel label="Saved plans" />
+        {plans.length ? (
+          <GroupedList inset={50} surface>
+            {plans.map((plan) => (
+              <Row
+                key={plan.id}
+                border={false}
+                leading={
+                  <View className="h-[38px] w-[38px] items-center justify-center rounded-xl bg-primary-soft">
+                    <Text className="text-[13px] font-extrabold text-primary">
+                      {planInitials(plan.name)}
+                    </Text>
+                  </View>
+                }
+                onPress={() => begin(plan.id)}
+                subtitle={planSubtitle(plan.id)}
+                title={plan.name}
+              />
+            ))}
+          </GroupedList>
+        ) : (
+          <EmptyState
+            message="Create a plan once, then start it here with every target set already in place."
+            title="No saved plans yet"
+          />
+        )}
+      </View>
     </Page>
   );
 }
@@ -227,6 +228,10 @@ export const TodayScreen = withObservables([], () => ({
   plans: database
     .get<WorkoutPlan>('workout_plans')
     .query(Q.sortBy('updated_at', Q.desc))
+    .observe(),
+  planExercises: database
+    .get<PlanExercise>('plan_exercises')
+    .query(Q.sortBy('order_index', Q.asc))
     .observe(),
   sessions: database
     .get<WorkoutSession>('workout_sessions')

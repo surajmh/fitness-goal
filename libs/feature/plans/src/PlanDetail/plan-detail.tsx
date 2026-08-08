@@ -4,6 +4,7 @@ import {
   Copy,
   ExerciseArtwork,
   FeedbackBanner,
+  FilterChip,
   Page,
   Pencil,
   Play,
@@ -16,6 +17,7 @@ import {
   useCSSVariable,
   View,
 } from '@fitnessgoal/shared/ui';
+import { PLAN_DIFFICULTIES } from '../plans-screen.helpers';
 import type { PlanDetailProps } from './plan-detail.types';
 import { usePlanDetail } from './use-plan-detail';
 
@@ -61,6 +63,19 @@ export function PlanDetail(props: PlanDetailProps) {
               Enter a plan name to save changes.
             </Text>
           ) : null}
+          <Text className="mb-2 mt-5 text-base font-semibold text-ink">
+            Difficulty
+          </Text>
+          <View className="flex-row gap-2">
+            {PLAN_DIFFICULTIES.map((level) => (
+              <FilterChip
+                key={level.key}
+                label={level.label}
+                onPress={() => detail.setDifficulty(level.key)}
+                selected={detail.difficulty === level.key}
+              />
+            ))}
+          </View>
           <Text className="mb-2 mt-5 text-base font-semibold text-ink">
             Description
           </Text>
@@ -155,7 +170,7 @@ export function PlanDetail(props: PlanDetailProps) {
       <View className="gap-3">
         <PrimaryButton
           disabled={detail.action !== null}
-          icon={<Play color={onPrimary} fill={onPrimary} size={18} />}
+          icon={<Play color={onPrimary} size={18} />}
           label="Start this workout"
           loading={detail.action === 'start'}
           onPress={detail.start}

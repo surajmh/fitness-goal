@@ -39,16 +39,14 @@ for (const file of files) {
     { componentName }
   );
 
-  let cleanedCode = jsCode;
-  if (name === 'brand-mark') {
-    cleanedCode = cleanedCode.replace('<Svg ', '<Svg width={size} height={size} accessibilityLabel="FitnessGoal" ');
-  } else {
-    cleanedCode = cleanedCode
-      .replace('<Svg ', '<Svg width={size} height={size} accessibilityElementsHidden ')
-      .replace(/stroke="currentColor"/g, 'stroke={color}')
-      .replace(/strokeWidth=\{1\.5\}/g, 'strokeWidth={strokeWidth}')
-      .replace(/strokeWidth=\{1\.8\}/g, 'strokeWidth={strokeWidth}');
-  }
+  const cleanedCode = jsCode
+    .replace('<Svg ', '<Svg width={size} height={size} accessibilityElementsHidden ')
+    .replace(/stroke="currentColor"/g, 'stroke={color}')
+    // react-native-svg has no currentColor, so a filled glyph that keeps the
+    // literal renders black in both themes. Resolve it to the colour prop.
+    .replace(/fill="currentColor"/g, 'fill={color}')
+    .replace(/strokeWidth=\{1\.5\}/g, 'strokeWidth={strokeWidth}')
+    .replace(/strokeWidth=\{1\.8\}/g, 'strokeWidth={strokeWidth}');
 
   fs.writeFileSync(path.join(outputDir, `${name}.tsx`), cleanedCode);
 }

@@ -1,3 +1,4 @@
+export * from './constants';
 export * from './database';
 export * from './database/workout-service';
 export * from './health';

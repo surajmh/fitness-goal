@@ -1,32 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  AccessibilityInfo,
-  Animated,
-  Easing,
-  Image,
-  StyleSheet,
-} from 'react-native';
+import { Animated, Easing, Image, StyleSheet } from 'react-native';
 import { ExerciseFigure } from '../icons';
 import type { Exercise } from '@fitnessgoal/data-access/workout';
 import { Text, View } from '../primitives';
 import { useExerciseVisual } from './exercise-artwork';
+import { useReduceMotion } from './use-reduce-motion';
 
 export function ExerciseMotionPreview({ exercise }: { exercise: Exercise }) {
   const { color, variant } = useExerciseVisual(exercise);
-  const [reduceMotion, setReduceMotion] = useState(false);
+  const reduceMotion = useReduceMotion();
   const [photoFailed, setPhotoFailed] = useState(false);
   const progress = useRef(new Animated.Value(0)).current;
   const frames = exercise.mediaFrames;
   const showPhotos = frames.length > 0 && !photoFailed;
-
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion);
-    const subscription = AccessibilityInfo.addEventListener(
-      'reduceMotionChanged',
-      setReduceMotion,
-    );
-    return () => subscription.remove();
-  }, []);
 
   useEffect(() => {
     if (reduceMotion) {

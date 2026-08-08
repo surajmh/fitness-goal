@@ -34,7 +34,5 @@ const unavailableModule = {
   async openSettings(): Promise<void> {},
 };
 
-export default (
-  requireOptionalNativeModule<HealthSyncModule>('HealthSync') ??
-  unavailableModule
-);
+export default requireOptionalNativeModule<HealthSyncModule>('HealthSync') ??
+  unavailableModule;

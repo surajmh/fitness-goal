@@ -1,4 +1,5 @@
 import { Model, Q } from '@nozbe/watermelondb';
+import type { PlanDifficulty } from '../constants';
 import {
   database,
   PlanExercise,
@@ -12,6 +13,7 @@ const USER_ID = 'local-user';
 export async function createPlan(input: {
   name: string;
   description: string;
+  difficulty: PlanDifficulty;
   exercises: Array<{
     exerciseId: string;
     targetSets: number;
@@ -25,6 +27,7 @@ export async function createPlan(input: {
       record.userId = USER_ID;
       record.name = input.name;
       record.description = input.description;
+      record.difficulty = input.difficulty;
     });
     const entries = input.exercises.map((item, orderIndex) =>
       planExercises.prepareCreate((record) => {
@@ -268,12 +271,13 @@ export async function deletePlan(plan: WorkoutPlan) {
 
 export async function updatePlan(
   plan: WorkoutPlan,
-  input: { name: string; description: string },
+  input: { name: string; description: string; difficulty: PlanDifficulty },
 ) {
   return database.write(() =>
     plan.update((record) => {
       record.name = input.name;
       record.description = input.description;
+      record.difficulty = input.difficulty;
     }),
   );
 }

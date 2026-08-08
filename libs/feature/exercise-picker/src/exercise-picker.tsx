@@ -8,10 +8,13 @@ import {
   ExerciseArtwork,
   Filter,
   FilterChip,
+  GroupedList,
+  Plus,
   Pressable,
   Row,
   ScrollView,
   SearchField,
+  SectionLabel,
   Text,
   TextButton,
   useCSSVariable,
@@ -49,6 +52,13 @@ function ExercisePickerBase({
   } = useExercisePicker(exercises);
   const visibleExercises = filtered.slice(0, visibleLimit);
   const selectedCount = selectedIds.length;
+  // The design heads the results with whatever narrowed them — "Chest · 6 results".
+  const resultsScope =
+    muscle !== 'all'
+      ? formatFilterLabel(muscle)
+      : equipment !== 'all'
+        ? formatFilterLabel(equipment)
+        : 'All exercises';
 
   return (
     <View className="gap-3">
@@ -65,7 +75,7 @@ function ExercisePickerBase({
           accessibilityLabel="Toggle exercise filters"
           className={`h-12 w-12 items-center justify-center rounded-xl border relative ${
             showFilters || activeFilterCount > 0
-              ? 'bg-primary/10 border-primary'
+              ? 'border-primary bg-primary-soft'
               : 'bg-surface border-outline'
           }`}
           onPress={toggleFilters}
@@ -76,7 +86,7 @@ function ExercisePickerBase({
           />
           {activeFilterCount > 0 ? (
             <View className="absolute -top-1 -right-1 h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1">
-              <Text className="text-xs font-bold text-surface">
+              <Text className="text-xs font-bold text-on-primary">
                 {activeFilterCount}
               </Text>
             </View>
@@ -90,7 +100,7 @@ function ExercisePickerBase({
           {muscle !== 'all' ? (
             <Pressable
               accessibilityLabel="Remove muscle filter"
-              className="flex-row items-center gap-1 rounded-full bg-primary/10 border border-primary/30 px-3 py-1"
+              className="flex-row items-center gap-1 rounded-full border border-primary bg-primary-soft px-3 py-1"
               onPress={() => setMuscle('all')}
             >
               <Text className="text-xs font-semibold text-primary">
@@ -102,7 +112,7 @@ function ExercisePickerBase({
           {equipment !== 'all' ? (
             <Pressable
               accessibilityLabel="Remove equipment filter"
-              className="flex-row items-center gap-1 rounded-full bg-primary/10 border border-primary/30 px-3 py-1"
+              className="flex-row items-center gap-1 rounded-full border border-primary bg-primary-soft px-3 py-1"
               onPress={() => setEquipment('all')}
             >
               <Text className="text-xs font-semibold text-primary">
@@ -126,7 +136,7 @@ function ExercisePickerBase({
               ) : null}
               <Pressable
                 accessibilityLabel="Close filters"
-                className="h-8 w-8 items-center justify-center rounded-lg bg-background"
+                className="h-8 w-8 items-center justify-center rounded-lg bg-canvas"
                 onPress={toggleFilters}
               >
                 <X color={muted} size={16} />
@@ -148,7 +158,9 @@ function ExercisePickerBase({
               {MUSCLE_OPTIONS.map((item) => (
                 <FilterChip
                   key={item}
-                  label={item === 'all' ? 'All muscles' : formatFilterLabel(item)}
+                  label={
+                    item === 'all' ? 'All muscles' : formatFilterLabel(item)
+                  }
                   onPress={() => setMuscle(item)}
                   selected={muscle === item}
                 />
@@ -170,7 +182,9 @@ function ExercisePickerBase({
               {EQUIPMENT_OPTIONS.map((item) => (
                 <FilterChip
                   key={item}
-                  label={item === 'all' ? 'All equipment' : formatFilterLabel(item)}
+                  label={
+                    item === 'all' ? 'All equipment' : formatFilterLabel(item)
+                  }
                   onPress={() => setEquipment(item)}
                   selected={equipment === item}
                 />
@@ -182,65 +196,62 @@ function ExercisePickerBase({
 
       {/* Results Header & Selection Status Badge */}
       <View className="mt-1 flex-row items-center justify-between">
-        <Text className="text-sm font-medium text-muted">
-          {filtered.length.toLocaleString()}{' '}
-          {filtered.length === 1 ? 'exercise' : 'exercises'} found
-        </Text>
-        <View className="flex-row items-center gap-2">
-          {selectedCount > 0 ? (
-            <View className="rounded-full bg-primary/15 px-3 py-1">
-              <Text className="text-xs font-bold text-primary">
-                {selectedCount} selected
-              </Text>
-            </View>
-          ) : null}
-        </View>
-      </View>
-
-      {/* Exercise Cards Container */}
-      <View className="rounded-xl bg-surface px-4">
-        {!filtered.length ? (
-          <View className="py-6">
-            <EmptyState
-              message="No exercises match your search criteria. Try adjusting or resetting your filters."
-              title="No exercises found"
-            />
-            <View className="mt-3 items-center">
-              <TextButton label="Clear all filters" onPress={resetFilters} />
-            </View>
+        <SectionLabel
+          label={`${resultsScope} · ${filtered.length.toLocaleString()} ${
+            filtered.length === 1 ? 'result' : 'results'
+          }`}
+        />
+        {selectedCount > 0 ? (
+          <View className="rounded-full bg-primary-soft px-3 py-1">
+            <Text className="text-xs font-bold text-primary">
+              {selectedCount} selected
+            </Text>
           </View>
         ) : null}
-
-        {visibleExercises.map((exercise, index) => {
-          const selected = selectedIds.includes(exercise.id);
-          const isLast = index === visibleExercises.length - 1;
-          return (
-            <Row
-              key={exercise.id}
-              border={!isLast}
-              leading={<ExerciseArtwork compact exercise={exercise} />}
-              onPress={() => onToggle(exercise.id)}
-              subtitle={`${formatFilterLabel(exercise.muscleGroup)} · ${formatFilterLabel(
-                exercise.equipment,
-              )}`}
-              title={exercise.name}
-              trailing={
-                <View
-                  className={`h-9 w-9 items-center justify-center rounded-full border ${
-                    selected
-                      ? 'bg-primary border-primary'
-                      : 'border-outline bg-background'
-                  }`}
-                >
-                  {selected ? (
-                    <Check color={onPrimary} size={16} strokeWidth={3} />
-                  ) : null}
-                </View>
-              }
-            />
-          );
-        })}
       </View>
+
+      {!filtered.length ? (
+        <View>
+          <EmptyState
+            message="No exercises match your search criteria. Try adjusting or resetting your filters."
+            title="No exercises found"
+          />
+          <View className="mt-3 items-center">
+            <TextButton label="Clear all filters" onPress={resetFilters} />
+          </View>
+        </View>
+      ) : (
+        <GroupedList inset={60}>
+          {visibleExercises.map((exercise) => {
+            const selected = selectedIds.includes(exercise.id);
+            return (
+              <Row
+                key={exercise.id}
+                border={false}
+                leading={<ExerciseArtwork compact exercise={exercise} />}
+                onPress={() => onToggle(exercise.id)}
+                subtitle={`${formatFilterLabel(exercise.muscleGroup)} · ${formatFilterLabel(
+                  exercise.equipment,
+                )}`}
+                title={exercise.name}
+                trailing={
+                  <View
+                    className={`h-7 w-7 items-center justify-center rounded-full ${
+                      selected ? 'bg-primary' : 'border-[1.5px] border-outline'
+                    }`}
+                  >
+                    {selected ? (
+                      <Check color={onPrimary} size={15} strokeWidth={3} />
+                    ) : (
+                      <Plus color={muted} size={15} strokeWidth={2.4} />
+                    )}
+                  </View>
+                }
+              />
+            );
+          })}
+        </GroupedList>
+      )}
 
       {/* Load More Button */}
       {visibleExercises.length < filtered.length ? (

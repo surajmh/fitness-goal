@@ -1,4 +1,7 @@
-import type { Exercise, WorkoutSession } from '@fitnessgoal/data-access/workout';
+import type {
+  Exercise,
+  WorkoutSession,
+} from '@fitnessgoal/data-access/workout';
 import type { HistorySessionSummary } from '../history-screen.types';
 
 export type WorkoutDetailProps = {

@@ -51,6 +51,7 @@ export class WorkoutPlan extends SyncModel {
   @field('user_id') userId: string;
   @field('name') name: string;
   @field('description') description: string;
+  @field('difficulty') difficulty: string;
 }
 
 export class PlanExercise extends SyncModel {

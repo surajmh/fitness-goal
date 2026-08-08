@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import { Q } from '@nozbe/watermelondb';
 import withObservables from '@nozbe/with-observables';
 import {
-  ChevronDown,
   EmptyState,
+  GroupedList,
   Page,
   Pressable,
   Row,
   ScreenTitle,
+  SectionLabel,
   Text,
-  useCSSVariable,
   USER_ID,
   View,
+  VolumeBar,
 } from '@fitnessgoal/shared/ui';
 import {
   BodyMetric,
@@ -20,20 +21,53 @@ import {
   deleteSession,
   duplicateSession,
   Exercise,
+  HealthRecord,
   useAppState,
   WorkoutSession,
   WorkoutSet,
 } from '@fitnessgoal/data-access/workout';
+import {
+  formatSessionDate,
+  formatWorkoutDuration,
+} from './history-screen.helpers';
 import type { HistoryScreenProps } from './history-screen.types';
 import { useHistoryScreen } from './use-history-screen';
 import { WorkoutDetail } from './WorkoutDetail';
 import { AnalyticsView } from './analytics/analytics-view';
 
-function HistoryBase({ sessions, sets, exercises, metrics }: HistoryScreenProps) {
+function DateTile({ startTime }: { startTime: number }) {
+  const { month, day } = formatSessionDate(startTime);
+  return (
+    <View className="h-11 w-11 items-center justify-center rounded-xl bg-surface">
+      <Text className="text-[9px] font-bold tabular-nums text-muted">
+        {month}
+      </Text>
+      <Text className="text-[15px] font-extrabold leading-none tabular-nums text-ink">
+        {day}
+      </Text>
+    </View>
+  );
+}
+
+function HistoryBase({
+  sessions,
+  sets,
+  exercises,
+  metrics,
+  sleepRecords,
+}: HistoryScreenProps) {
   const [tab, setTab] = useState<'workouts' | 'analytics'>('workouts');
   const { setActiveSessionId, weightUnit } = useAppState();
-  const primary = useCSSVariable('--primary') as string;
-  const { selected, setSelected, summary } = useHistoryScreen(sets);
+  const {
+    selected,
+    setSelected,
+    summary,
+    span,
+    weeklyVolume,
+    maxVolume,
+    groups,
+    totals,
+  } = useHistoryScreen(sessions, sets);
 
   if (selected && summary) {
     return (
@@ -57,58 +91,82 @@ function HistoryBase({ sessions, sets, exercises, metrics }: HistoryScreenProps)
 
   return (
     <Page>
-      <ScreenTitle
-        title="History & Analytics"
-        subtitle="A durable record of every completed session and your long-term progress."
-      />
+      <ScreenTitle title="History" subtitle={span} />
 
-      <View className="mb-6 flex-row rounded-xl bg-surface p-1">
-        <Pressable
-          accessibilityRole="button"
-          className={`flex-1 items-center justify-center rounded-lg py-2.5 ${
-            tab === 'workouts' ? 'bg-surface-raised' : ''
-          }`}
-          onPress={() => setTab('workouts')}
-        >
-          <Text
-            className={`text-sm font-semibold ${
-              tab === 'workouts' ? 'text-ink' : 'text-muted'
+      <View className="mb-5 flex-row rounded-xl bg-surface p-1">
+        {(['workouts', 'analytics'] as const).map((key) => (
+          <Pressable
+            key={key}
+            accessibilityRole="button"
+            accessibilityState={{ selected: tab === key }}
+            className={`flex-1 items-center justify-center rounded-lg py-2.5 ${
+              tab === key ? 'bg-surface-raised' : ''
             }`}
+            onPress={() => setTab(key)}
           >
-            Workouts ({sessions.length})
-          </Text>
-        </Pressable>
-
-        <Pressable
-          accessibilityRole="button"
-          className={`flex-1 items-center justify-center rounded-lg py-2.5 ${
-            tab === 'analytics' ? 'bg-surface-raised' : ''
-          }`}
-          onPress={() => setTab('analytics')}
-        >
-          <Text
-            className={`text-sm font-semibold ${
-              tab === 'analytics' ? 'text-ink' : 'text-muted'
-            }`}
-          >
-            Analytics
-          </Text>
-        </Pressable>
+            <Text
+              className={`text-sm font-semibold capitalize ${
+                tab === key ? 'text-ink' : 'text-muted'
+              }`}
+            >
+              {key === 'workouts'
+                ? `Workouts (${sessions.length})`
+                : 'Progress'}
+            </Text>
+          </Pressable>
+        ))}
       </View>
 
       {tab === 'workouts' ? (
         <>
-          {sessions.map((session) => (
-            <Row
-              key={session.id}
-              onPress={() => setSelected(session)}
-              subtitle={`${new Date(session.startTime).toLocaleDateString()} · ${
-                session.notes || 'View details'
-              }`}
-              title={session.planId ? 'Planned workout' : 'Unplanned workout'}
-              trailing={<ChevronDown color={primary} size={19} />}
-            />
+          <View
+            accessibilityLabel={`Volume over the last seven weeks: ${weeklyVolume
+              .map((value) => Math.round(value))
+              .join(', ')} ${weightUnit}`}
+            className="h-24 flex-row items-end gap-1.5 rounded-2xl bg-surface p-3.5"
+          >
+            {weeklyVolume.map((value, index) => (
+              <View key={index} className="flex-1">
+                <VolumeBar
+                  active={value > 0}
+                  height={
+                    value > 0 ? Math.max(10, (value / maxVolume) * 68) : 6
+                  }
+                />
+              </View>
+            ))}
+          </View>
+
+          {groups.map((group) => (
+            <View key={group.label} className="mt-5 gap-1">
+              <SectionLabel label={group.label} />
+              <GroupedList inset={56}>
+                {group.sessions.map((session) => {
+                  const total = totals.get(session.id);
+                  return (
+                    <Row
+                      key={session.id}
+                      border={false}
+                      leading={<DateTile startTime={session.startTime} />}
+                      onPress={() => setSelected(session)}
+                      subtitle={[
+                        formatWorkoutDuration(
+                          session.startTime,
+                          session.endTime,
+                        ),
+                        `${Math.round(total?.volume ?? 0).toLocaleString()} ${weightUnit}`,
+                        `${total?.setCount ?? 0} sets`,
+                      ].join(' · ')}
+                      title={
+                        session.planId ? 'Planned workout' : 'Unplanned workout'
+                      }
+                    />
+                  );
+                })}
+              </GroupedList>
+            </View>
           ))}
+
           {!sessions.length ? (
             <EmptyState
               message="Finish a workout and it will appear here with a one-tap repeat action."
@@ -117,7 +175,13 @@ function HistoryBase({ sessions, sets, exercises, metrics }: HistoryScreenProps)
           ) : null}
         </>
       ) : (
-        <AnalyticsView exercises={exercises} metrics={metrics} sets={sets} />
+        <AnalyticsView
+          exercises={exercises}
+          metrics={metrics}
+          sessions={sessions}
+          sets={sets}
+          sleepRecords={sleepRecords}
+        />
       )}
     </Page>
   );
@@ -136,5 +200,9 @@ export const HistoryScreen = withObservables([], () => ({
   metrics: database
     .get<BodyMetric>('body_metrics')
     .query(Q.where('user_id', USER_ID), Q.sortBy('date', Q.desc), Q.take(12))
+    .observe(),
+  sleepRecords: database
+    .get<HealthRecord>('health_records')
+    .query(Q.where('data_type', 'sleep'), Q.sortBy('end_time', Q.desc))
     .observe(),
 }))(HistoryBase as any) as React.ComponentType;

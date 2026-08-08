@@ -6,6 +6,7 @@ import {
   PrimaryButton,
   ProgressChart,
   ScrollView,
+  StatTile,
   Text,
   TextInput,
   useCSSVariable,
@@ -14,24 +15,31 @@ import {
 import {
   type BodyMetric,
   type Exercise,
+  type HealthRecord,
   useAppState,
+  type WorkoutSession,
   type WorkoutSet,
 } from '@fitnessgoal/data-access/workout';
+import { ANALYTICS_RANGES } from './analytics.helpers';
 import { useAnalytics } from './use-analytics';
 
 export type AnalyticsViewProps = {
   metrics: BodyMetric[];
   sets: WorkoutSet[];
   exercises: Exercise[];
+  sessions: WorkoutSession[];
+  sleepRecords: HealthRecord[];
 };
 
 export function AnalyticsView({
   metrics,
   sets,
   exercises,
+  sessions,
+  sleepRecords,
 }: AnalyticsViewProps) {
   const { weightUnit } = useAppState();
-  const muted = useCSSVariable('--muted') as string;
+  const placeholderInk = useCSSVariable('--placeholder-ink') as string;
   const {
     weight,
     setWeight,
@@ -45,15 +53,31 @@ export function AnalyticsView({
     oneRmValues,
     setSelectedExerciseId,
     addMetric,
-  } = useAnalytics(sets, exercises);
+    range,
+    setRange,
+    weeklyVolume,
+    consistency,
+    sleepHours,
+  } = useAnalytics(sets, exercises, sessions, sleepRecords);
 
   return (
-    <View className="gap-4">
-      <ProgressChart
-        label="Body weight"
-        unit={weightUnit}
-        values={[...metrics].reverse().map((item) => item.bodyWeight)}
-      />
+    <View className="gap-3">
+      <ScrollView
+        className="-mx-5"
+        contentContainerClassName="gap-2 px-5"
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        {ANALYTICS_RANGES.map((item) => (
+          <FilterChip
+            key={item.key}
+            label={item.label}
+            onPress={() => setRange(item.key)}
+            selected={range === item.key}
+          />
+        ))}
+      </ScrollView>
+
       {exerciseIds.length ? (
         <>
           <ScrollView
@@ -63,9 +87,7 @@ export function AnalyticsView({
             showsHorizontalScrollIndicator={false}
           >
             {exerciseIds.map((exerciseId) => {
-              const exercise = exercises.find(
-                (item) => item.id === exerciseId,
-              );
+              const exercise = exercises.find((item) => item.id === exerciseId);
               return (
                 <FilterChip
                   key={exerciseId}
@@ -77,12 +99,42 @@ export function AnalyticsView({
             })}
           </ScrollView>
           <ProgressChart
-            label={`${selectedExercise?.name ?? 'Exercise'} estimated 1RM`}
+            label={`Estimated 1RM · ${selectedExercise?.name ?? 'Exercise'}`}
+            role="coral"
             unit={weightUnit}
             values={oneRmValues}
           />
         </>
       ) : null}
+
+      <ProgressChart
+        label="Weekly volume"
+        role="cyan"
+        unit={weightUnit}
+        values={weeklyVolume.map((value) => Math.round(value))}
+      />
+
+      <View className="flex-row gap-3">
+        <StatTile
+          caption="sessions kept"
+          label="Consistency"
+          role="lime"
+          value={`${consistency}%`}
+        />
+        <StatTile
+          caption={sleepHours ? 'avg sleep hrs' : 'connect health to see'}
+          label="Recovery"
+          role="recovery"
+          value={sleepHours ? sleepHours.toFixed(1) : '—'}
+        />
+      </View>
+
+      <ProgressChart
+        label="Body weight"
+        role="recovery"
+        unit={weightUnit}
+        values={[...metrics].reverse().map((item) => item.bodyWeight)}
+      />
 
       {!metrics.length && !oneRmValues.length ? (
         <EmptyState
@@ -91,7 +143,7 @@ export function AnalyticsView({
         />
       ) : null}
 
-      <View className="mt-7">
+      <View className="mt-4">
         <Text className="mb-3 text-xl font-bold text-ink">Body check-in</Text>
         <View className="flex-row gap-3">
           <View className="flex-1">
@@ -103,7 +155,7 @@ export function AnalyticsView({
               keyboardType="decimal-pad"
               onChangeText={setWeight}
               placeholder="175"
-              placeholderTextColor={muted}
+              placeholderTextColor={placeholderInk}
               value={weight}
             />
           </View>
@@ -116,7 +168,7 @@ export function AnalyticsView({
               keyboardType="decimal-pad"
               onChangeText={setBodyFat}
               placeholder="Optional"
-              placeholderTextColor={muted}
+              placeholderTextColor={placeholderInk}
               value={bodyFat}
             />
           </View>

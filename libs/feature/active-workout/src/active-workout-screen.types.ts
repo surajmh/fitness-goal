@@ -1,4 +1,8 @@
-import type { Exercise, WorkoutSession, WorkoutSet } from '@fitnessgoal/data-access/workout';
+import type {
+  Exercise,
+  WorkoutSession,
+  WorkoutSet,
+} from '@fitnessgoal/data-access/workout';
 
 export type ActiveWorkoutScreenProps = {
   session: WorkoutSession;

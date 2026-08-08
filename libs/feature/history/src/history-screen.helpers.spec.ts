@@ -1,8 +1,15 @@
 import {
+  buildWeeklyVolume,
+  formatHistorySpan,
   formatSetPerformance,
   formatWorkoutDuration,
   getSessionSummary,
+  groupSessionsByWeek,
+  summarizeSessions,
 } from './history-screen.helpers';
+
+const NOW = new Date('2026-08-08T09:00:00Z');
+const daysAgo = (days: number) => NOW.getTime() - days * 86_400_000;
 
 describe('getSessionSummary', () => {
   it('groups only sets from the selected session', () => {
@@ -37,5 +44,62 @@ describe('getSessionSummary', () => {
         'lb',
       ),
     ).toBe('No result recorded');
+  });
+});
+
+describe('buildWeeklyVolume', () => {
+  it('buckets volume into seven weeks, oldest first, and drops the rest', () => {
+    const weeks = buildWeeklyVolume(
+      [
+        { weight: 10, reps: 10, createdAt: new Date(daysAgo(1)) },
+        { weight: 20, reps: 10, createdAt: new Date(daysAgo(8)) },
+        { weight: 99, reps: 10, createdAt: new Date(daysAgo(400)) },
+      ] as never,
+      7,
+      NOW,
+    );
+    expect(weeks).toHaveLength(7);
+    expect(weeks[6]).toBe(100);
+    expect(weeks[5]).toBe(200);
+    expect(weeks.reduce((total, value) => total + value, 0)).toBe(300);
+  });
+});
+
+describe('groupSessionsByWeek', () => {
+  it('runs consecutive sessions under one heading', () => {
+    const groups = groupSessionsByWeek(
+      [
+        { startTime: daysAgo(1) },
+        { startTime: daysAgo(3) },
+        { startTime: daysAgo(9) },
+      ] as never,
+      NOW,
+    );
+    expect(groups.map((group) => group.label)).toEqual([
+      'This week',
+      'Last week',
+    ]);
+    expect(groups[0].sessions).toHaveLength(2);
+  });
+});
+
+describe('summarizeSessions', () => {
+  it('totals volume and set count per session', () => {
+    const totals = summarizeSessions([
+      { sessionId: 'one', weight: 10, reps: 5 },
+      { sessionId: 'one', weight: 10, reps: 5 },
+      { sessionId: 'two', weight: 20, reps: 5 },
+    ] as never);
+    expect(totals.get('one')).toEqual({ volume: 100, setCount: 2 });
+    expect(totals.get('two')).toEqual({ volume: 100, setCount: 1 });
+  });
+});
+
+describe('formatHistorySpan', () => {
+  it('pairs the session count with the span it covers', () => {
+    expect(formatHistorySpan([{ startTime: daysAgo(90) }] as never, NOW)).toBe(
+      '1 session · 3 months',
+    );
+    expect(formatHistorySpan([], NOW)).toBe('Nothing logged yet');
   });
 });

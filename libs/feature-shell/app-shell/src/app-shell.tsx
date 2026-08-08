@@ -90,7 +90,8 @@ export function AppShell() {
     >
       {APP_TABS.map((item) => {
         const selected = tab === item.key;
-        const Icon = TAB_ICONS[item.key];
+        const glyphs = TAB_ICONS[item.key];
+        const Icon = selected ? glyphs.current : glyphs.idle;
         return (
           <Pressable
             key={item.key}
@@ -99,17 +100,12 @@ export function AppShell() {
             accessibilityState={{ selected }}
             className={
               expanded
-                ? `mb-2 min-h-16 items-center justify-center gap-1 rounded-xl ${selected ? 'bg-surface' : ''}`
+                ? `mb-2 min-h-16 items-center justify-center gap-1 rounded-xl ${selected ? 'bg-primary-soft' : ''}`
                 : 'min-h-14 flex-1 items-center justify-center gap-1'
             }
             onPress={() => setTab(item.key)}
           >
-            <Icon
-              color={selected ? primary : muted}
-              fill="none"
-              size={22}
-              strokeWidth={selected ? 2.2 : 1.8}
-            />
+            <Icon color={selected ? primary : muted} size={24} />
             <Text
               className={`text-xs font-semibold ${selected ? 'text-primary' : 'text-muted'}`}
             >

@@ -89,9 +89,18 @@ export const migrations = schemaMigrations({
       steps: [
         addColumns({
           table: 'exercises',
-          columns: [
-            { name: 'media_frames', type: 'string', isOptional: true },
-          ],
+          columns: [{ name: 'media_frames', type: 'string', isOptional: true }],
+        }),
+      ],
+    },
+    {
+      // Existing plans land on '' here; the seeder backfills them from the
+      // "Beginner · " prefix their names used to carry.
+      toVersion: 6,
+      steps: [
+        addColumns({
+          table: 'workout_plans',
+          columns: [{ name: 'difficulty', type: 'string', isIndexed: true }],
         }),
       ],
     },
